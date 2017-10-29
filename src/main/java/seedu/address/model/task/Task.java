@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
 /**
  * Represents a Task in the addressbook
  */
@@ -13,19 +16,20 @@ public class Task implements ReadOnlyTask, Comparable<Task> {
 
     private static final int UPCOMING_DAYS_THRESHOLD = 7;
 
-    private Header header;
+    private ObjectProperty<Header> header;
     private boolean isCompleted;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private ObjectProperty<LocalDateTime> startDateTime;
+    private ObjectProperty<LocalDateTime> endDateTime;
     private LocalDateTime lastUpdatedTime;
 
     // ================ Constructors ==============================
+
     /**
      * Constructor for a task without date/time
      */
     public Task(Header header) {
         requireNonNull(header);
-        this.header = header;
+        this.header = new SimpleObjectProperty<>(header);
         this.isCompleted = false;
         this.startDateTime = null;
         this.endDateTime = null;
@@ -37,10 +41,10 @@ public class Task implements ReadOnlyTask, Comparable<Task> {
      */
     public Task(Header header, Optional<LocalDateTime> deadline) {
         requireNonNull(header);
-        this.header = header;
+        this.header = new SimpleObjectProperty<>(header);
         this.isCompleted = false;
         this.startDateTime = null;
-        this.endDateTime = deadline.orElse(null);
+        this.endDateTime = new SimpleObjectProperty<>(deadline.orElse(null));
         this.setLastUpdatedTimeToCurrent();
     }
 
@@ -50,10 +54,10 @@ public class Task implements ReadOnlyTask, Comparable<Task> {
     public Task(Header header, Optional<LocalDateTime> startDateTime,
                 Optional<LocalDateTime> endDateTime) {
         requireNonNull(header);
-        this.header = header;
+        this.header = new SimpleObjectProperty<>(header);
         this.isCompleted = false;
-        this.startDateTime = startDateTime.orElse(null);
-        this.endDateTime = endDateTime.orElse(null);
+        this.startDateTime = new SimpleObjectProperty<>(startDateTime.orElse(null));
+        this.endDateTime = new SimpleObjectProperty<>(endDateTime.orElse(null));
         this.setLastUpdatedTimeToCurrent();
     }
 
@@ -71,8 +75,13 @@ public class Task implements ReadOnlyTask, Comparable<Task> {
     // ================ Getter methods ==============================
 
     @Override
-    public Header getHeader() {
+    public ObjectProperty<Header> headerProperty() {
         return header;
+    }
+
+    @Override
+    public Header getHeader() {
+        return header.get();
     }
 
     @Override
@@ -144,13 +153,23 @@ public class Task implements ReadOnlyTask, Comparable<Task> {
     }
 
     @Override
+    public ObjectProperty<LocalDateTime> startDateTime() {
+        return startDateTime;
+    }
+
+    @Override
     public Optional<LocalDateTime> getStartDateTime() {
-        return Optional.ofNullable(startDateTime);
+        return Optional.ofNullable(startDateTime.get());
+    }
+
+    @Override
+    public ObjectProperty<LocalDateTime> endDateTime() {
+        return endDateTime;
     }
 
     @Override
     public Optional<LocalDateTime> getEndDateTime() {
-        return Optional.ofNullable(endDateTime);
+        return Optional.ofNullable(endDateTime.get());
     }
 
     /**
@@ -172,7 +191,7 @@ public class Task implements ReadOnlyTask, Comparable<Task> {
     // ================ Setter methods ==============================
 
     public void setHeader(Header header) {
-        this.header = header;
+        this.header.set(requireNonNull(header));
         setLastUpdatedTimeToCurrent();
     }
 
@@ -187,12 +206,12 @@ public class Task implements ReadOnlyTask, Comparable<Task> {
     }
 
     public void setStartDateTime(Optional<LocalDateTime> startDateTime) {
-        this.startDateTime = startDateTime.orElse(null);
+        this.startDateTime.set(startDateTime.orElse(null));
         setLastUpdatedTimeToCurrent();
     }
 
     public void setEndDateTime(Optional<LocalDateTime> endDateTime) {
-        this.endDateTime = endDateTime.orElse(null);
+        this.endDateTime.set(endDateTime.orElse(null));
         setLastUpdatedTimeToCurrent();
     }
 
