@@ -59,13 +59,16 @@ public class ResultDisplay extends UiPart<Region> {
         resultDisplay.textProperty().bind(displayed);
         registerAsAnEventHandler(this);
     }
+
     //@@author aziziazfar
     @Subscribe
     private void handleNewListResultAvailable(ListSizeEvent event) {
         Label listSizeLabel = new Label(event.toString());
-        listSizeLabel.setStyle("-fx-background-color: #00bf00;"
+        listSizeLabel.setStyle("-fx-background-color: #6965d3;"
                 + " -fx-background-radius: 80 80 80 80;"
-                + " -fx-background-size: 35px");
+                + " -fx-background-size: 35px;"
+                + " -fx-text-fill: #ffffff;"
+                + " -fx-label-padding: 5 5 5 5");
         listSizeDisplay.getChildren().setAll(listSizeLabel);
     }
 
