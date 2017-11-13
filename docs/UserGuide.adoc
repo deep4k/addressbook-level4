@@ -105,10 +105,25 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 .  Refer to the link:#features[Features] section below for details of all commands.
 
-== Get to know Bluebird
+// tag::design[]
+== Get to know the birds of Bluebird
 
-In this section, we have provided a screenshot of what your screen would look like, and a quick guide to help you
-navigate our user interface with ease.
+In this section, we will explore the various birds used in the application and what they represent.
+
+The purpose of creating these birds is to boost the liveliness of our application and provide both children
+and adults alike with fun and animated interactive styles with Bluebird.
+
+*Figure 3* highlights the range of Bluebird icons and at which command or feature they will appear.
+
+image::UserGuideBanner.png[width="800"]
+Figure 3: Various designs of the birds used in Bluebird
+
+We hope that these icons will keep our users in a light and free mood whenever they are using Bluebird.
+
+If you are wondering what the exact commands are when these birds will appear, the _Features_ segment below
+is just what you need!
+
+// end::design[]
 
 == Features
 
@@ -150,6 +165,30 @@ Examples:
 * Fields can be updated in the future using the `EDIT` command. +
 ****
 // end::add[]
+
+// tag::task[]
+==== Adds a task: `add`
+The very same command `add` can be used to create a new task in Bluebird. This can be done 
+by typing 'task' in the command box (the region where all inputs are entered). It is as easy as that!
+Upon typing 'task' Bluebird will display a message that tasks are enabled and the same commands that 
+were used for persons can be used for tasks!
+
+However there is one aspect where task commands are drastically different from person commands,
+you can interact with Bluebird as though you are talking to an actual person! You do not have 
+to follow any parameters or strict date formats.
+
+The format is simply : `title of task` `by` `any time` or `title of task` `from` `any time` `to` `any time`
+
+You just have to replace the `title of task` with the actual title you want and `any time` with any 
+time, date or even short-forms! Refer to the examples below for clarifications.
+
+Examples:
+
+* `add` `Go fishing` `by today`
+* `add` `Football training` `from 3pm to 5pm`
+* `add` `Go tuition` `by` `tmr`.
+// end::task[]
+
 
 // tag::list[]
 ==== Lists all persons : `list`
@@ -437,6 +476,11 @@ Removes the alias shortcut 'ph'. Next instances of ph will no longer translate t
 ****
 // end::unalias[]
 
+==== List all alias : `listalias`
+
+Want to view your list of aliases? Simply just use the `listalias` command! +
+Format: `listalias`
+
 // tag::pinunpin[]
 ==== Pin a person : `pin`
 
@@ -517,8 +561,10 @@ There is no need for you to save manually. Yay!
 
 == Command Summary
 
-* *Add* : `add` `n/NAME` `[p/PHONE_NUMBER]` `[e/EMAIL]` `[a/ADDRESS]` `[t/TAG]` `...` +
+* *Add a person* : `add` `n/NAME` `[p/PHONE_NUMBER]` `[e/EMAIL]` `[a/ADDRESS]` `[t/TAG]` `...` +
 e.g. `add` `n/James Ho` `p/22224444` `e/jamesho@example.com` `a/123, Clementi Rd, 1234665` `t/friend` `t/colleague`
+* *Add a task* : `add` `title of task` `by` or `from` and `to` `any time`
+e.g.  `add` `Drive kid home` `from` `5pm` to `6pm`
 * *Clear* : `clear`
 * *Delete* : `delete` `INDEX` +
 e.g. `delete` `3`
