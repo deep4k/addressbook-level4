@@ -42,8 +42,6 @@ By default, when Bluebird is launched it is set to limit the number of commands 
 In order to enable all the commands, please type "parent" into the command box and press enter.
 
 == Test Cases
-You can choose whether or not you want to continue with the tutorial. +
-
 [width="100%",cols="30%,70%",options="header"]
 |===
 |Input|Expected Output
