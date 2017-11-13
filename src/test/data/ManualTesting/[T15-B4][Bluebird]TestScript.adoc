@@ -57,7 +57,7 @@ In order to enable all the commands, please type "parent" into the command box a
                  n/NAME is a compulsory field  +
                  Parameters: n/NAME [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [t/TAG]... +
                  Example: add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 b/22/08/1993 t/friends t/owesMoney  +
-|edit 21 p/96670667 |Chirp! Unknown command!
+|edit 11 p/96670667 |Chirp! Unknown command!
                       Want to add a new contact or task? use "add" +
                      Want to see your contact's full details? use "select" +
                      Want to view list of contact or tasks? use "list" or "listpin" +
@@ -68,8 +68,8 @@ In order to enable all the commands, please type "parent" into the command box a
                      Want to view list of tasks? use "task" +
                      Want to view list of contact? use "person" +
 |parent |All commands are enabled!
-|edit 21 p/96670667 |Oh no! This index provided seems to be invalid. +
-|pin 21|Oh no! This index provided seems to be invalid. +
+|edit 11 p/96670667 |Edited Person: test user Phone: 96670667 Email:   Address:   Birthday:   Remark:  Tags:  +
+|pin 11|Pinned Person: test user Phone: 96670667 Email:   Address:   Birthday:   Remark:  Tags:  +
 |list|Listed all persons +
 |delete 10|Deleted Person:
            Zachary Quek Phone: 9123417 Email: zacq@example.com Address: Blk 45 Clementi Ave 6, #01-31 Birthday: 01/12/1980 Remark:  Tags: [colleagues]
@@ -79,17 +79,17 @@ In order to enable all the commands, please type "parent" into the command box a
 |exit|
 |Run bluebird.jar again|(test user should still be pinned, and bluebird will be in child mode)
 |parent|All commands are enabled!
-|delete 8~10|Deleted Person: +
-             Irfan Ibrahim Phone: 92492021 Email: irfan@example.com Address: Blk 47 Tampines Street 20, #17-35 Birthday: 22/10/1985 Remark:  Tags: [classmates] +
+|delete 8~10|Deleted Person:  +
              Roy Balakrishnan Phone: 92624417 Email: royb@example.com Address: Blk 45 Aljunied Street 85, #11-31 Birthday: 15/12/1991 Remark:  Tags: [colleagues] +
-             Charlotte Oliveiro Phone: 93210283 Email: charlotte@example.com Address: Blk 11 Ang Mo Kio Street 74, #11-04 Birthday: 02/02/1902 Remark:  Tags: [neighbours] +
+             test user Phone: 96670667 Email:   Address:   Birthday:   Remark:  Tags:  +
+             Wilson Loh Phone: 89102937 Email: wilsonl@example.com Address: Blk 39 Yishun Street 12, #10-11 Birthday: 03/02/1995 Remark:  Tags: [friends] +
 |delete 8 9 10|Oh no! This index provided seems to be invalid. (Index 9 and 10 is invalid)
-|edit 1 b/17/11/1995|Edited Person: test user Phone:   Email:   Address:   Birthday: 17/11/1995 Remark:  Tags:  +
+|edit 1 b/17/11/1995|Edited Person: Alex Yeoh Phone: 87438807 Email: alexyeoh@example.com Address: Blk 30 Geylang Street 29, #06-40 Birthday: 17/11/1995 Remark:  Tags: [friends] +
 |showbirthdays|Chirp! Here are the birthdays for today. +
 |list|Listed all persons +
-|hide 1|Hidden Person: test user Phone:   Email:   Address:   Birthday: 17/11/1995 Remark:  Tags: +
+|hide 1|Hidden Person: Alex Yeoh Phone: 87438807 Email: alexyeoh@example.com Address: Blk 30 Geylang Street 29, #06-40 Birthday: 17/11/1995 Remark:  Tags: [friends] +
 |listhidden|Listed all hidden persons +
-|unhide 1|Unhidden Person: test user Phone:   Email:   Address:   Birthday: 17/11/1995 Remark:  Tags: +
+|unhide 1|Unhidden Person: Alex Yeoh Phone: 87438807 Email: alexyeoh@example.com Address: Blk 30 Geylang Street 29, #06-40 Birthday: 17/11/1995 Remark:  Tags: [friends] +
 |list|Listed all persons +
 |task|Showing all tasks and only task commands are enabled +
 |mark 1|Marked Task(s): +
@@ -106,18 +106,18 @@ In order to enable all the commands, please type "parent" into the command box a
 
             Go grocery shopping +
 |person|Showing all persons and only person commands are enabled +
-|find test|1 persons listed! +
+|find alex|1 persons listed! +
 |select 1|Selected Person: 1 +
 |list|Listed all persons +
 |alias k/del s/delete|New alias added:  keyword: del representation: delete +
 |del 2|Deleted Person:
-       Jamie Oliveoil Phone: 80992010 Email: jamieo@example.com Address: Blk 83 Holly Street 85, #02-13 Birthday: 01/10/2010 Remark:  Tags: [niece] +
+       Bernice Yu Phone: 99272758 Email: berniceyu@example.com Address: Blk 30 Lorong 3 Serangoon Gardens, #07-18 Birthday: 11/11/1995 Remark: Likes to swim. Tags: [colleagues][friends] +
 |undo|Undo success! +
 |redo|Redo success! +
 |unalias k/del|Alias removed:  keyword: del representation: delete +
-|pin 1|Pinned Person: test user Phone:   Email:   Address:   Birthday: 17/11/1995 Remark:  Tags:  +
+|pin 1|Chirp! This person is already pinned. +
 |listpin|Listed all pinned person +
-|unpin 1|Unpinned Person: test user Phone:   Email:   Address:   Birthday: 17/11/1995 Remark:  Tags:  +
+|unpin 1|Unpinned Person: Alex Yeoh Phone: 87438807 Email: alexyeoh@example.com Address: Blk 30 Geylang Street 29, #06-40 Birthday: 17/11/1995 Remark:  Tags: [friends] +
 |list|Listed all persons +
 
 |===

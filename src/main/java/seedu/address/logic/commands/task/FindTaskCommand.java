@@ -1,5 +1,7 @@
 package seedu.address.logic.commands.task;
 
+import seedu.address.commons.core.EventsCenter;
+import seedu.address.commons.events.model.ListSizeEvent;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.task.TaskHasKeywordsPredicate;
@@ -27,6 +29,7 @@ public class FindTaskCommand extends Command {
     @Override
     public CommandResult execute() {
         model.updateFilteredTaskList(predicate);
+        EventsCenter.getInstance().post(new ListSizeEvent(model.getFilteredTaskList().size()));
         return new CommandResult(getMessageForTaskListShownSummary(model.getFilteredTaskList().size()));
     }
 
