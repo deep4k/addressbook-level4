@@ -29,6 +29,7 @@ public class ResultDisplay extends UiPart<Region> {
     private static final Logger logger = LogsCenter.getLogger(ResultDisplay.class);
     private static final String FXML = "ResultDisplay.fxml";
     //@@author Alim95
+    private static final String BIRTHDAY_ICON = "/images/BirthdayBird.png";
     private static final String DELETE_ICON = "/images/DeleteBird.png";
     private static final String EDIT_ICON = "/images/EditBird.png";
     private static final String ERROR_ICON = "/images/ErrorBird.png";
@@ -60,12 +61,15 @@ public class ResultDisplay extends UiPart<Region> {
         registerAsAnEventHandler(this);
     }
 
+    //@@author aziziazfar
     @Subscribe
     private void handleNewListResultAvailable(ListSizeEvent event) {
         Label listSizeLabel = new Label(event.toString());
-        listSizeLabel.setStyle("-fx-background-color: #00bf00;"
+        listSizeLabel.setStyle("-fx-background-color: #6965d3;"
                 + " -fx-background-radius: 80 80 80 80;"
-                + " -fx-background-size: 35px");
+                + " -fx-background-size: 35px;"
+                + " -fx-text-fill: #ffffff;"
+                + " -fx-label-padding: 5 5 5 5");
         listSizeDisplay.getChildren().setAll(listSizeLabel);
     }
 
@@ -107,6 +111,9 @@ public class ResultDisplay extends UiPart<Region> {
         case "task":
             listSizeDisplay.setVisible(false);
             imageDisplay.setImage(new Image(TASK_ICON));
+            break;
+        case "showbirthdays":
+            imageDisplay.setImage(new Image(BIRTHDAY_ICON));
             break;
         case "undo":
             listSizeDisplay.setVisible(false);

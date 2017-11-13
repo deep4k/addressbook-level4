@@ -51,9 +51,10 @@ public class TutorialMessages {
             + "1. add\n"
             + "2. select\n"
             + "3. find\n"
-            + "4. findpin\n"
+            + "4. findpinned\n"
             + "5. list\n"
             + "6. listpin\n"
+            + "7. showbirthdays\n"
             + "7. remark\n"
             + "8. sort\n"
             + "9. history\n"
@@ -68,7 +69,7 @@ public class TutorialMessages {
     public static final String USAGE_BEGIN = "Let's try out the different commands of Bluebird! Activate Parent Mode "
             + "by typing \"parent\" into the command box and pressing enter to enable all commands! "
             + "Click on command box and Press F2 to view the list of commands and enter the commands "
-            + "on the command box to execute it. A parameter in [ ] means it is optional.";
+            + "on the command box to execute it.";
 
     /* Concluding message */
     public static final String CONCLUSION = "That's it for the tutorial! If you still need help, you can "

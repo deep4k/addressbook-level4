@@ -4,12 +4,12 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 :stylesDir: ../stylesheets
 
 == Project: Bluebird
-Written in Java language, Bluebird is a desktop based organisational tool for the working parent on the go. Bluebird is suitable
+Bluebird is a desktop based organisational tool for the working parent on the go. Bluebird is suitable
 for a variety of day-to-day management tasks, including managing appointments for both yourself and your
-child, and also organising the contact information from your Address Book. +
+child, and also organising the contact information from your Address Book. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 15 kLoC. +
 
-Included in this portfolio are all the enhancements, features and tests that Alpheus Lim Wei Xiang has contributed to the project.
-
+This project portfolio serves to provide an insight into how Alpheus Lim Wei Xiang has contributed to project Bluebird. Included
+in this portfolio are the enhancements, features, tests and proposed enhancements that Alpheus Lim Wei Xiang has contribued to the project.
 
 *Code contributed*: [https://github.com/CS2103AUG2017-T15-B4/main/blob/master/collated/main/Alim95.md[Functional code]] [https://github.com/CS2103AUG2017-T15-B4/main/blob/master/collated/test/Alim95.md[Test code]]
 
@@ -161,8 +161,9 @@ include::../DeveloperGuide.adoc[tag=parentmode]
 
 ---
 
-=== Enhancement Proposed: Import/Export Google contacts
-This allows for easy transfer of contacts from the user's phone when they first use Bluebird.
+=== Enhancement Proposed: Pin/Unpin Task
+Users may have trouble keeping track of important tasks that they have to do. This feature allows them to pin imortant tasks for
+easy access.
 
 === Enhancement Proposed: Cloud Storage
 Bluebird will prompt user to select if they would like to upload and save their data to a cloud storage
@@ -176,7 +177,7 @@ Acceptance Testing for other applications
 
 * Found a bug for switch theme (Issue https://github.com/CS2103AUG2017-T09-B3/main/issues/194[#194])
 
-Contribution to Bluebird
+Contribution to Project Bluebird
 
 * Updated the UI of Bluebird
 (Pull requests https://github.com/CS2103AUG2017-T15-B4/main/pull/14[#14], https://github.com/CS2103AUG2017-T15-B4/main/pull/58[#58],
@@ -192,3 +193,4 @@ https://github.com/CS2103AUG2017-T15-B4/main/pull/245[#245])
 * Added toggling of Ui between Person, Task, Alias, Pinned, and All lists (Pull requests https://github.com/CS2103AUG2017-T15-B4/main/pull/205[#205],
 https://github.com/CS2103AUG2017-T15-B4/main/pull/208[#208], https://github.com/CS2103AUG2017-T15-B4/main/pull/216[#216],
 https://github.com/CS2103AUG2017-T15-B4/main/pull/257[#257])
+* Proposed Parent Child Mode for Bluebird
