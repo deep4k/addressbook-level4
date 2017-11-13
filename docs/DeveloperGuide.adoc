@@ -14,7 +14,12 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
 By: `Team T15-B4`      Since: `Sep 2017`      Licence: `MIT`
 
+// tag::banner[]
+image::DevGuideBanner.png[width="800"]
+// end::banner[]
+
 == Overview
+link:#bluebird---developer-guide[To Table of Contents]
 
 Bluebird is a Java-based address book and task organisation software application. With concise and clear
 descriptions, our developer guide aims to provide an inside look as to how the Bluebird team created the software, should
@@ -23,6 +28,11 @@ the architectural flow of how components interact with one another and beginner-
 guide aims to also serve as an avenue for beginners to software application building.
 
 == Setting up
+link:#bluebird---developer-guide[To Table of Contents]
+
+In order for you to get started with Bluebird, the prerequisites and configurations listed below are fundamental to
+set up the application. We would highly recommend all fellow developers to follow the steps listed below so that you can have
+a smooth set-up and get familiar with Bluebird as soon as possible.
 
 === Prerequisites
 
@@ -94,14 +104,26 @@ When you are ready to start coding,
 1. Get some sense of the overall design by reading the link:#architecture[Architecture] section.
 2. Take a look at the section link:#suggested-programming-tasks-to-get-started[Suggested Programming Tasks to Get Started].
 
+// tag::design[]
 == Design
+link:#bluebird---developer-guide[To Table of Contents]
+
+This segment is catered towards developers of all skill levels and will provide you with a comprehensive view of the Bluebird's coding structure and the software design
+patterns and principles it follows.
+
+The entire design structure is broken down into the elements as shown below in order to help you navigate through the various types of diagrams and components.
+
+[NOTE]
+The diagrams in this segment all include a border with the Bluebird logo in order to better
+identify the various class diagrams unique to Bluebird. Other segments of the developer guide do
+not follow this style.
 
 === Architecture
 
 image::Architecture.png[width="600"]
-_Figure 2.1.1 : Architecture Diagram_
+_Figure 3.1.1 : Architecture Diagram_
 
-The *_Architecture Diagram_* given above explains the high-level design of the App. Given below is a quick overview of each component.
+The above *_Figure 3.1.1_* explains the high-level design of the App. Given below is a quick overview of each component.
 
 [TIP]
 The `.pptx` files used to create diagrams in this document can be found in the link:{repoURL}/docs/diagrams/[diagrams] folder. To update a diagram, modify the diagram in the pptx file, select the objects of the diagram, and choose `Save as picture`.
@@ -131,23 +153,27 @@ Each of the four components
 For example, the `Logic` component (see the class diagram given below) defines it's API in the `Logic.java` interface and exposes its functionality using the `LogicManager.java` class.
 
 image::LogicClassDiagram.png[width="800"]
-_Figure 2.1.2 : Class Diagram of the Logic Component_
+_Figure 3.1.2 : Class Diagram of the Logic Component_
 
 [discrete]
 ==== Events-Driven nature of the design
 
+Bluebird applies an Event-Driven approach and the Observer Pattern to reduce direct coupling between the various components. For example, the UI and Storage components should be notified when there is a
+change in the application. But the Model component does not inform UI and Storage of these changes directly. Instead, it posts a new event and relies on the EventsCenter to notifying Storage and UI. Thus Storage and UI behave as
+as Observers in this event driven nature. This process achieves the required objective of avoiding bi-directional coupling.
+
 The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `delete 1`.
 
 image::SDforDeletePerson.png[width="800"]
-_Figure 2.1.3a : Component interactions for `delete 1` command (part 1)_
+_Figure 3.1.3a : Component interactions for `delete 1` command (part 1)_
 
 [NOTE]
 Note how the `Model` simply raises a `AddressBookChangedEvent` when the Address Book data are changed, instead of asking the `Storage` to save the updates to the hard disk.
 
-The diagram below shows how the `EventsCenter` reacts to that event, which eventually results in the updates being saved to the hard disk and the status bar of the UI being updated to reflect the 'Last Updated' time.
+_Figure 3.1.3b_ below shows how the `EventsCenter` reacts to that event, which eventually results in the updates being saved to the hard disk and the status bar of the UI being updated to reflect the 'Last Updated' time.
 
 image::SDforDeletePersonEventHandling.png[width="800"]
-_Figure 2.1.3b : Component interactions for `delete 1` command (part 2)_
+_Figure 3.1.3b : Component interactions for `delete 1` command (part 2)_
 
 [NOTE]
 Note how the event is propagated through the `EventsCenter` to the `Storage` and `UI` without `Model` having to be coupled to either of them. This is an example of how this Event Driven approach helps us reduce direct coupling between components.
@@ -155,12 +181,19 @@ Note how the event is propagated through the `EventsCenter` to the `Storage` and
 The sections below give more details of each component.
 
 ==== Model-View-Controller (MVC) pattern
-Model View Components
+As efficient developers, we always strive to reduce coupling in our applications.
+And to further reduce coupling between components, the Model-View-Controller pattern is also used in Bluebird. There are 3 components for this pattern and they are:
+
+1. Model: The Model component maintains and holds Bluebird's data.
+2. View:  Part of the UI components and resources such as the .fxml file is responsible for displaying Bluebird's data and interacting with the user. Through events, as shown in _Figure 3.1.3b_ , the UI component is able to get data updates from the model.
+3. Controller: Parts of the UI component such as (CommandBox) act as 'Controllers' for part of the UI. The CommandBox accepts user command input and requests the Logic component to execute the command entered. This execution may result in changes in the model.
+
+The various types of View and Controller components can be seen in _Figure 3.2.1_
 
 === UI component
 
 image::UiClassDiagram.png[width="800"]
-_Figure 2.2.1 : Structure of the UI Component_
+_Figure 3.2.1 : Structure of the UI Component_
 
 *API* : link:{repoURL}/src/main/java/seedu/address/ui/Ui.java[`Ui.java`]
 
@@ -177,10 +210,10 @@ The `UI` component,
 === Logic component
 
 image::LogicClassDiagram.png[width="800"]
-_Figure 2.3.1 : Structure of the Logic Component_
+_Figure 3.3.1 : Structure of the Logic Component_
 
 image::LogicCommandClassDiagram.png[width="800"]
-_Figure 2.3.2 : Structure of Commands in the Logic Component. This diagram shows finer details concerning `XYZCommand` and `Command` in Figure 2.3.1_
+_Figure 3.3.2 : Structure of Commands in the Logic Component. This diagram shows finer details concerning `XYZCommand` and `Command` in Figure 3.3.1_
 
 *API* :
 link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
@@ -192,20 +225,20 @@ link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 
 Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` API call.
 
-image::DeletePersonSdForLogic.png[width="800"]
-_Figure 2.3.1 : Interactions Inside the Logic Component for the `delete 1` Command_
+image::DeletePersonSdForLogic2.png[width="800"]
+_Figure 3.3.1 : Interactions Inside the Logic Component for the `delete 1` Command_
 
 === Model component
 
 image::ModelClassDiagram.png[width="800"]
-_Figure 2.4.1 : Structure of the Model Component_
+_Figure 3.4.1 : Structure of the Model Component_
 
 *API* : link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
 
 The `Model`,
 
 * stores a `UserPref` object that represents the user's preferences.
-* stores the Address Book data.
+* stores Bluebird's data.
 * exposes an unmodifiable `ObservableList<ReadOnlyPerson>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * does not depend on any of the other three components.
 
@@ -224,42 +257,10 @@ The `Storage` component,
 === Common classes
 
 Classes used by multiple components are in the `seedu.addressbook.commons` package.
-
-=== Software Design Principles
-Intro
-
-==== Single Responsibility Principle (SRP)
-
-==== Open-Closed Principle (OCP)
-
- Open-Closed Principle (OCP): A module should be open for extension but closed for modification.
- That is, modules should be written so that they can be extended, without requiring them to be modified.
-
-
-When different classes interact with one another, coupling is inevitable and and interaction will naturally lead to increased coupling. Bluebird applies OCP in order to reduce coupling and increase cohesion. +
-As shown in Figure 2.7.2.1, if a new command is added to Bluebird, there is no need to modify the `Command` class, the new command can simply just inherit from
-`Command`.
-
-image::OCPLogic.png[width="800"]
-
-
-==== Liskov Substitution Principle (LSP)
-
- Liskov Substitution Principle (LSP): Derived classes must be substitutable for their base classes.
-
-Bluebird applies the Liskov Substitution Principle to avoid breaking the functionality of the code.
-An example of this can be seen below:
-
-image::LSP-CommandClass.png[width="500"]
-
-The `UndoableCommand` class follows the Liskov Substitution Principle because it fulfills `Command` 's
-expectation of `UndoableCommand` objects. Substituting `DeleteCommand` 's objects for `UndoableCommand` 's objects
-will not break the `Command` class functionality.
-
-
-==== Dependency Inversion Principle (DIP)
+// end::design[]
 
 == Implementation
+link:#bluebird---developer-guide[To Table of Contents]
 
 This section describes some noteworthy details on how certain features are implemented.
 
@@ -556,17 +557,76 @@ find Josephine, or find Blk 231, Sembawang Close 221 #02-232, S750231). +
 //  end::find[]
 
 //  tag::alias[]
-=== Alias / Unalias
+=== Alias / Unalias mechanism
 
-The alias and unalias features are implemented by comparing creating a new AliasToken model which contains all created aliases,
+The alias and unalias features are implemented by comparing and creating a new AliasToken model which contains all created aliases,
 this model is checked against user input in the parser and converts any alias keywords to their representations before other
 commands are parsed. Each AliasToken consists of a keyword (the main alias) and representation (what it means) and they can
-be used for both commands or shortcuts. For example : alias k/disappear s/hide , this makes the hide command
-to work with AliasToken keyword disappear. Unaliasing the AliasToken keyword token simply removes the AliasToken.
+be used for both commands or shortcuts. For example, by entering the input: _' alias k/disappear s/hide '_ , the hide command is made
+to work with the AliasToken keyword _'disappear'_ . Unaliasing the AliasToken keyword token simply removes the AliasToken and this done
+by entering the input; _'unalias disappear'_.
+
+_Figure 4.6_ shows the sequence diagram for a new AliasCommand.
+
+image::AliasSD2.png[width="600"]
+_Figure 4.6 : AliasCommand Sequence Diagram_
+
+Every time a new input is given by the user, the Addressbook parser always
+checks the command word and the following arguments given by the user against
+a HashMap that contains all the AliasTokens and the registered commands in the model.
+This can be seen in _Code segment 4.6.1_. This primary
+check system ensures no duplicate aliases are made or no AliasToken keyword will
+clash with any existing commands.
+
+Similarly, the arguments are also checked for aliases as can be seen in and _Code segment 4.6.2_.
+This check allows the keywords to be entered by the user and parsed into their respective
+representations before the AddressBookParser executes the user's input.
+
+[source,java]
+----
+    private String commandWordCheck(String commandWord) {
+        String checkedCommandWord = commandWord;
+
+        ReadOnlyAliasToken token = aliasMap.get(commandWord);
+        if (token != null) {
+            checkedCommandWord = token.getRepresentation().representation;
+        }
+        return checkedCommandWord;
+    }
+
+----
+_Code segment 4.6.1 : commandWordCheck_
+
+[source,java]
+----
+    private String argumentsCheck(String checkedCommandWord, String arguments) {
+
+        if ("alias".equals(checkedCommandWord) || ("unalias".equals(checkedCommandWord))) {
+            return arguments;
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append(" ");
+        Matcher matcher = KEYWORD_PATTERN.matcher(arguments);
+
+        while (matcher.find()) {
+            String keyword = matcher.group(1);
+            String spaces = matcher.group(2); // The amount of spaces entered is kept the same
+            ReadOnlyAliasToken token = aliasMap.get(keyword);
+            if (token != null) {
+                keyword = token.getRepresentation().representation;
+            }
+            builder.append(keyword);
+            builder.append(spaces);
+        }
+
+        return builder.toString();
+    }
+----
+_Code segment 4.6.2 : argumentsCheck_
 
 ==== Design Considerations
 
-**Aspect:** Defining how accurate the alias command will be +
+**Aspect:** The accuracy of alias commands needs to be high +
 **Alternative 1 (current choice):** Aliases are parsed based on their keywords which are stored in a UniqueAliasTokenList.
  All user input will parse for aliases first before dispatching to command parser, including parsing of both the command
  word as well as the command arguments. +
@@ -858,7 +918,12 @@ The implementation of the method is credited to Hyma Tiyyagura.
 
 // tag::documentation[]
 == Documentation
+link:#bluebird---developer-guide[To Table of Contents]
 
+// tag::docSummary[]
+This section explains how changes to made your version of Bluebird can be properly documented
+and saved for sharing purposes. Also included below are steps that will help facilitate this process.
+// end::docSummary[]
 We use asciidoc for writing documentation.
 
 [NOTE]
@@ -888,6 +953,7 @@ image::chrome_save_as_pdf.png[width="300"]
 _Figure 5.6.1 : Saving documentation as PDF files in Chrome_
 
 == Testing
+link:#bluebird---developer-guide[To Table of Contents]
 
 === Running Tests
 
@@ -937,6 +1003,10 @@ e.g. `seedu.address.logic.LogicManagerTest`
 * Solution: Execute Gradle task `processResources`.
 
 == Dev Ops
+link:#bluebird---developer-guide[To Table of Contents]
+
+In order to improve the quality of code of our application, the steps below are required
+to  automate testing and add dependencies.
 
 === Build Automation
 
@@ -961,253 +1031,10 @@ A project often depends on third-party libraries. For example, Address Book depe
 a. Include those libraries in the repo (this bloats the repo size) +
 b. Require developers to download those libraries manually (this creates extra work for developers)
 
-[appendix]
-== Suggested Programming Tasks to Get Started
-
-Suggested path for new programmers:
-
-1. First, add small local-impact (i.e. the impact of the change does not go beyond the component) enhancements to one component at a time. Some suggestions are given in this section link:#improving-each-component[Improving a Component].
-
-2. Next, add a feature that touches multiple components to learn how to implement an end-to-end feature across all components. The section link:#creating-a-new-command-code-remark-code[Creating a new command: `remark`] explains how to go about adding such a feature.
-
-=== Improving each component
-
-Each individual exercise in this section is component-based (i.e. you would not need to modify the other components to get it to work).
-
-[discrete]
-==== `Logic` component
-
-[TIP]
-Do take a look at the link:#logic-component[Design: Logic Component] section before attempting to modify the `Logic` component.
-
-. Add a shorthand equivalent alias for each of the individual commands. For example, besides typing `clear`, the user can also type `c` to remove all persons in the list.
-+
-****
-* Hints
-** Just like we store each individual command word constant `COMMAND_WORD` inside `*Command.java` (e.g.  link:{repoURL}/src/main/java/seedu/address/logic/commands/FindCommand.java[`FindCommand#COMMAND_WORD`], link:{repoURL}/src/main/java/seedu/address/logic/commands/DeleteCommand.java[`DeleteCommand#COMMAND_WORD`]), you need a new constant for aliases as well (e.g. `FindCommand#COMMAND_ALIAS`).
-** link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] is responsible for analyzing command words.
-* Solution
-** Modify the switch statement in link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser#parseCommand(String)`] such that both the proper command word and alias can be used to execute the same intended command.
-** See this https://github.com/se-edu/addressbook-level4/pull/590/files[PR] for the full solution.
-****
-
-[discrete]
-==== `Model` component
-
-[TIP]
-Do take a look at the link:#model-component[Design: Model Component] section before attempting to modify the `Model` component.
-
-. Add a `removeTag(Tag)` method. The specified tag will be removed from everyone in the address book.
-+
-****
-* Hints
-** The link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model`] API needs to be updated.
-**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] classes can be used to implement the tag removal logic. link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] allows you to update a person, and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] allows you to update the tags.
-* Solution
-** Add the implementation of `deleteTag(Tag)` method in link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`]. Loop through each person, and remove the `tag` from each person.
-** See this https://github.com/se-edu/addressbook-level4/pull/591/files[PR] for the full solution.
-****
-
-[discrete]
-==== `Ui` component
-
-[TIP]
-Do take a look at the link:#ui-component[Design: UI Component] section before attempting to modify the `UI` component.
-
-. Use different colors for different tags inside person cards. For example, `friends` tags can be all in grey, and `colleagues` tags can be all in red.
-+
-**Before**
-+
-image::getting-started-ui-tag-before.png[width="300"]
-+
-**After**
-+
-image::getting-started-ui-tag-after.png[width="300"]
-+
-****
-* Hints
-** The tag labels are created inside link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard#initTags(ReadOnlyPerson)`] (`new Label(tag.tagName)`). https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Label.html[JavaFX's `Label` class] allows you to modify the style of each Label, such as changing its color.
-** Use the .css attribute `-fx-background-color` to add a color.
-* Solution
-** See this https://github.com/se-edu/addressbook-level4/pull/592/files[PR] for the full solution.
-****
-
-. Modify link:{repoURL}/src/main/java/seedu/address/commons/events/ui/NewResultAvailableEvent.java[`NewResultAvailableEvent`] such that link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay`] can show a different style on error (currently it shows the same regardless of errors).
-+
-**Before**
-+
-image::getting-started-ui-result-before.png[width="200"]
-+
-**After**
-+
-image::getting-started-ui-result-after.png[width="200"]
-+
-****
-* Hints
-** link:{repoURL}/src/main/java/seedu/address/commons/events/ui/NewResultAvailableEvent.java[`NewResultAvailableEvent`] is raised by link:{repoURL}/src/main/java/seedu/address/ui/CommandBox.java[`CommandBox`] which also knows whether the result is a success or failure, and is caught by link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay`] which is where we want to change the style to.
-** Refer to link:{repoURL}/src/main/java/seedu/address/ui/CommandBox.java[`CommandBox`] for an example on how to display an error.
-* Solution
-** Modify link:{repoURL}/src/main/java/seedu/address/commons/events/ui/NewResultAvailableEvent.java[`NewResultAvailableEvent`] 's constructor so that users of the event can indicate whether an error has occurred.
-** Modify link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay#handleNewResultAvailableEvent(event)`] to react to this event appropriately.
-** See this https://github.com/se-edu/addressbook-level4/pull/593/files[PR] for the full solution.
-****
-
-. Modify the link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to show the total number of people in the address book.
-+
-**Before**
-+
-image::getting-started-ui-status-before.png[width="500"]
-+
-**After**
-+
-image::getting-started-ui-status-after.png[width="500"]
-+
-****
-* Hints
-** link:{repoURL}/src/main/resources/view/StatusBarFooter.fxml[`StatusBarFooter.fxml`] will need a new `StatusBar`. Be sure to set the `GridPane.columnIndex` properly for each `StatusBar` to avoid misalignment!
-** link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] needs to initialize the status bar on application start, and to update it accordingly whenever the address book is updated.
-* Solution
-** Modify the constructor of link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to take in the number of persons when the application just started.
-** Use link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter#handleAddressBookChangedEvent(AddressBookChangedEvent)`] to update the number of persons whenever there are new changes to the addressbook.
-** See this https://github.com/se-edu/addressbook-level4/pull/596/files[PR] for the full solution.
-****
-
-[discrete]
-==== `Storage` component
-
-[TIP]
-Do take a look at the link:#storage-component[Design: Storage Component] section before attempting to modify the `Storage` component.
-
-. Add a new method `backupAddressBook(ReadOnlyAddressBook)`, so that the address book can be saved in a fixed temporary location.
-+
-****
-* Hint
-** Add the API method in link:{repoURL}/src/main/java/seedu/address/storage/AddressBookStorage.java[`AddressBookStorage`] interface.
-** Implement the logic in link:{repoURL}/src/main/java/seedu/address/storage/StorageManager.java[`StorageManager`] class.
-* Solution
-** See this https://github.com/se-edu/addressbook-level4/pull/594/files[PR] for the full solution.
-****
-
-=== Creating a new command: `remark`
-
-By creating this command, you will get a chance to learn how to implement a feature end-to-end, touching all major components of the app.
-
-==== Description
-Edits the remark for a person specified in the `INDEX`. +
-Format: `remark INDEX r/[REMARK]`
-
-Examples:
-
-* `remark 1 r/Likes to drink coffee.` +
-Edits the remark for the first person to `Likes to drink coffee.`
-* `remark 1 r/` +
-Removes the remark for the first person.
-
-==== Step-by-step Instructions
-
-===== [Step 1] Logic: Teach the app to accept 'remark' which does nothing
-Let's start by teaching the application how to parse a `remark` command. We will add the logic of `remark` later.
-
-**Main:**
-
-. Add a `RemarkCommand` that extends link:{repoURL}/src/main/java/seedu/address/logic/commands/UndoableCommand.java[`UndoableCommand`]. Upon execution, it should just throw an `Exception`.
-. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to accept a `RemarkCommand`.
-
-**Tests:**
-
-. Add `RemarkCommandTest` that tests that `executeUndoableCommand()` throws an Exception.
-. Add new test method to link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`], which tests that typing "remark" returns an instance of `RemarkCommand`.
-
-===== [Step 2] Logic: Teach the app to accept 'remark' arguments
-Let's teach the application to parse arguments that our `remark` command will accept. E.g. `1 r/Likes to drink coffee.`
-
-**Main:**
-
-. Modify `RemarkCommand` to take in an `Index` and `String` and print those two parameters as the error message.
-. Add `RemarkCommandParser` that knows how to parse two arguments, one index and one with prefix 'r/'.
-. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to use the newly implemented `RemarkCommandParser`.
-
-**Tests:**
-
-. Modify `RemarkCommandTest` to test the `RemarkCommand#equals()` method.
-. Add `RemarkCommandParserTest` that tests different boundary values
-for `RemarkCommandParser`.
-. Modify link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`] to test that the correct command is generated according to the user input.
-
-===== [Step 3] Ui: Add a placeholder for remark in `PersonCard`
-Let's add a placeholder on all our link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] s to display a remark for each person later.
-
-**Main:**
-
-. Add a `Label` with any random text inside link:{repoURL}/src/main/resources/view/PersonListCard.fxml[`PersonListCard.fxml`].
-. Add FXML annotation in link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] to tie the variable to the actual label.
-
-**Tests:**
-
-. Modify link:{repoURL}/src/test/java/guitests/guihandles/PersonCardHandle.java[`PersonCardHandle`] so that future tests can read the contents of the remark label.
-
-===== [Step 4] Model: Add `Remark` class
-We have to properly encapsulate the remark in our link:{repoURL}/src/main/java/seedu/address/model/person/ReadOnlyPerson.java[`ReadOnlyPerson`] class. Instead of just using a `String`, let's follow the conventional class structure that the codebase already uses by adding a `Remark` class.
-
-**Main:**
-
-. Add `Remark` to model component (you can copy from link:{repoURL}/src/main/java/seedu/address/model/person/Address.java[`Address`], remove the regex and change the names accordingly).
-. Modify `RemarkCommand` to now take in a `Remark` instead of a `String`.
-
-**Tests:**
-
-. Add test for `Remark`, to test the `Remark#equals()` method.
-
-===== [Step 5] Model: Modify `ReadOnlyPerson` to support a `Remark` field
-Now we have the `Remark` class, we need to actually use it inside link:{repoURL}/src/main/java/seedu/address/model/person/ReadOnlyPerson.java[`ReadOnlyPerson`].
-
-**Main:**
-
-. Add three methods `setRemark(Remark)`, `getRemark()` and `remarkProperty()`. Be sure to implement these newly created methods in link:{repoURL}/src/main/java/seedu/address/model/person/ReadOnlyPerson.java[`Person`], which implements the link:{repoURL}/src/main/java/seedu/address/model/person/ReadOnlyPerson.java[`ReadOnlyPerson`] interface.
-. You may assume that the user will not be able to use the `add` and `edit` commands to modify the remarks field (i.e. the person will be created without a remark).
-. Modify link:{repoURL}/src/main/java/seedu/address/model/util/SampleDataUtil.java/[`SampleDataUtil`] to add remarks for the sample data (delete your `addressBook.xml` so that the application will load the sample data when you launch it.)
-
-===== [Step 6] Storage: Add `Remark` field to `XmlAdaptedPerson` class
-We now have `Remark` s for `Person` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storage/XmlAdaptedPerson.java[`XmlAdaptedPerson`] to include a `Remark` field so that it will be saved.
-
-**Main:**
-
-. Add a new Xml field for `Remark`.
-. Be sure to modify the logic of the constructor and `toModelType()`, which handles the conversion to/from  link:{repoURL}/src/main/java/seedu/address/model/person/ReadOnlyPerson.java[`ReadOnlyPerson`].
-
-**Tests:**
-
-. Fix `validAddressBook.xml` such that the XML tests will not fail due to a missing `<remark>` element.
-
-===== [Step 7] Ui: Connect `Remark` field to `PersonCard`
-Our remark label in link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] is still a placeholder. Let's bring it to life by binding it with the actual `remark` field.
-
-**Main:**
-
-. Modify link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard#bindListeners()`] to add the binding for `remark`.
-
-**Tests:**
-
-. Modify link:{repoURL}/src/test/java/seedu/address/ui/testutil/GuiTestAssert.java[`GuiTestAssert#assertCardDisplaysPerson(...)`] so that it will compare the remark label.
-. In link:{repoURL}/src/test/java/seedu/address/ui/PersonCardTest.java[`PersonCardTest`], call `personWithTags.setRemark(ALICE.getRemark())` to test that changes in the link:{repoURL}/src/main/java/seedu/address/model/person/ReadOnlyPerson.java[`Person`] 's remark correctly updates the corresponding link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`].
-
-===== [Step 8] Logic: Implement `RemarkCommand#execute()` logic
-We now have everything set up... but we still can't modify the remarks. Let's finish it up by adding in actual logic for our `remark` command.
-
-**Main:**
-
-. Replace the logic in `RemarkCommand#execute()` (that currently just throws an `Exception`), with the actual logic to modify the remarks of a person.
-
-**Tests:**
-
-. Update `RemarkCommandTest` to test that the `execute()` logic works.
-
-==== Full Solution
-
-See this https://github.com/se-edu/addressbook-level4/pull/599[PR] for the step-by-step solution.
 
 [appendix]
 == User Stories
+link:#bluebird---developer-guide[To Table of Contents]
 
 Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (unlikely to have) - `*`
 
@@ -1249,6 +1076,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 [appendix]
 == Use Cases
+link:#bluebird---developer-guide[To Table of Contents]
 
 (For all use cases below, the *System* is the `BlueBird` and the *Actor* is the `user`, unless specified otherwise)
 
@@ -1567,6 +1395,8 @@ Use case ends.
 
 [appendix]
 == Non Functional Requirements
+link:#bluebird---developer-guide[To Table of Contents]
+
 
 .  Should work on any link:#mainstream-os[mainstream OS] as long as it has Java `1.8.0_60` or higher installed.
 .  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
@@ -1583,6 +1413,7 @@ Use case ends.
 
 [appendix]
 == Glossary
+link:#bluebird---developer-guide[To Table of Contents]
 
 [[mainstream-os]]
 Mainstream OS
@@ -1705,20 +1536,3 @@ asciidoc
 asciidoc is a markup language, which is a system for annotating a document in a way that is syntactically
 distinguishable from the text
 ....
-
-[appendix]
-== Product Survey
-
-*Product Name*
-
-Author: ...
-
-Pros:
-
-* ...
-* ...
-
-Cons:
-
-* ...
-* ...
