@@ -3,8 +3,10 @@ package seedu.address.logic.commands.task;
 import java.util.ArrayList;
 import java.util.List;
 
+import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.events.model.ListSizeEvent;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.UndoableCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -63,6 +65,7 @@ public class DeleteTaskCommand extends UndoableCommand {
         for (ReadOnlyTask toAppend : tasksToDelete) {
             builder.append("\n" + toAppend.toString());
         }
+        EventsCenter.getInstance().post(new ListSizeEvent(tasksToDelete.size()));
         return new CommandResult(String.format(MESSAGE_DELETE_TASK_SUCCESS, builder));
     }
 
