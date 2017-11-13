@@ -18,7 +18,7 @@ By: `Team T15-B4`      Since: `Sep 2017`      Licence: `MIT`
 image::DevGuideBanner.png[width="800"]
 // end::banner[]
 
-== Overview 
+== Overview
 link:#bluebird---developer-guide[To Table of Contents]
 
 Bluebird is a Java-based address book and task organisation software application. With concise and clear
@@ -30,8 +30,8 @@ guide aims to also serve as an avenue for beginners to software application buil
 == Setting up
 link:#bluebird---developer-guide[To Table of Contents]
 
-In order for you to get started with Bluebird, the prerequisites and configurations listed below are fundamental to 
-set up the application. We would highly recommend all fellow developers to follow the steps listed below so that you can have 
+In order for you to get started with Bluebird, the prerequisites and configurations listed below are fundamental to
+set up the application. We would highly recommend all fellow developers to follow the steps listed below so that you can have
 a smooth set-up and get familiar with Bluebird as soon as possible.
 
 === Prerequisites
@@ -158,8 +158,8 @@ _Figure 3.1.2 : Class Diagram of the Logic Component_
 [discrete]
 ==== Events-Driven nature of the design
 
-Bluebird applies an Event-Driven approach and the Observer Pattern to reduce direct coupling between the various components. For example, the UI and Storage components should be notified when there is a 
-change in the application. But the Model component does not inform UI and Storage of these changes directly. Instead, it posts a new event and relies on the EventsCenter to notifying Storage and UI. Thus Storage and UI behave as 
+Bluebird applies an Event-Driven approach and the Observer Pattern to reduce direct coupling between the various components. For example, the UI and Storage components should be notified when there is a
+change in the application. But the Model component does not inform UI and Storage of these changes directly. Instead, it posts a new event and relies on the EventsCenter to notifying Storage and UI. Thus Storage and UI behave as
 as Observers in this event driven nature. This process achieves the required objective of avoiding bi-directional coupling.
 
 The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `delete 1`.
@@ -188,7 +188,7 @@ And to further reduce coupling between components, the Model-View-Controller pat
 2. View:  Part of the UI components and resources such as the .fxml file is responsible for displaying Bluebird's data and interacting with the user. Through events, as shown in _Figure 3.1.3b_ , the UI component is able to get data updates from the model.
 3. Controller: Parts of the UI component such as (CommandBox) act as 'Controllers' for part of the UI. The CommandBox accepts user command input and requests the Logic component to execute the command entered. This execution may result in changes in the model.
 
-The various types of View and Controller components can be seen in _Figure 3.2.1_ 
+The various types of View and Controller components can be seen in _Figure 3.2.1_
 
 === UI component
 
@@ -563,7 +563,7 @@ The alias and unalias features are implemented by comparing and creating a new A
 this model is checked against user input in the parser and converts any alias keywords to their representations before other
 commands are parsed. Each AliasToken consists of a keyword (the main alias) and representation (what it means) and they can
 be used for both commands or shortcuts. For example, by entering the input: _' alias k/disappear s/hide '_ , the hide command is made
-to work with the AliasToken keyword _'disappear'_ . Unaliasing the AliasToken keyword token simply removes the AliasToken and this done 
+to work with the AliasToken keyword _'disappear'_ . Unaliasing the AliasToken keyword token simply removes the AliasToken and this done
 by entering the input; _'unalias disappear'_.
 
 _Figure 4.6_ shows the sequence diagram for a new AliasCommand.
@@ -571,8 +571,8 @@ _Figure 4.6_ shows the sequence diagram for a new AliasCommand.
 image::AliasSD2.png[width="600"]
 _Figure 4.6 : AliasCommand Sequence Diagram_
 
-Every time a new input is given by the user, the Addressbook parser always 
-checks the command word and the following arguments given by the user against 
+Every time a new input is given by the user, the Addressbook parser always
+checks the command word and the following arguments given by the user against
 a HashMap that contains all the AliasTokens and the registered commands in the model.
 This can be seen in _Code segment 4.6.1_. This primary
 check system ensures no duplicate aliases are made or no AliasToken keyword will
