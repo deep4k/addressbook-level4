@@ -168,18 +168,18 @@ Examples:
 
 // tag::task[]
 ==== Adds a task: `add`
-The very same command `add` can be used to create a new task in Bluebird. This can be done 
+The very same command `add` can be used to create a new task in Bluebird. This can be done
 by typing 'task' in the command box (the region where all inputs are entered). It is as easy as that!
-Upon typing 'task' Bluebird will display a message that tasks are enabled and the same commands that 
+Upon typing 'task' Bluebird will display a message that tasks are enabled and the same commands that
 were used for persons can be used for tasks!
 
 However there is one aspect where task commands are drastically different from person commands,
-you can interact with Bluebird as though you are talking to an actual person! You do not have 
+you can interact with Bluebird as though you are talking to an actual person! You do not have
 to follow any parameters or strict date formats.
 
 The format is simply : `title of task` `by` `any time` or `title of task` `from` `any time` `to` `any time`
 
-You just have to replace the `title of task` with the actual title you want and `any time` with any 
+You just have to replace the `title of task` with the actual title you want and `any time` with any
 time, date or even short-forms! Refer to the examples below for clarifications.
 
 Examples:
