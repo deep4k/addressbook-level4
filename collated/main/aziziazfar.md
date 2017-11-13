@@ -181,6 +181,9 @@ public class ListSizeEvent extends BaseEvent {
 ```
 ###### \java\seedu\address\logic\parser\person\DeleteCommandParser.java
 ``` java
+    private static final String RANGE_SEPARATOR = "~";
+    private static final int SINGLE_ARGUMENT = 2; //Accounts for space.
+
     /**
      * Parses the given {@code String} of arguments in the context of the DeleteCommand
      * and returns an DeleteCommand object for execution.
@@ -188,7 +191,7 @@ public class ListSizeEvent extends BaseEvent {
      * @throws ParseException if the user input does not conform the expected format
      */
     public DeleteCommand parse(String args) throws ParseException {
-        if (args.length() == 2) {
+        if (args.length() == SINGLE_ARGUMENT) {
             try {
                 Index index = ParserUtil.parseIndex(args);
                 return new DeleteCommand(index);
@@ -196,7 +199,7 @@ public class ListSizeEvent extends BaseEvent {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
-        } else if (args.contains("~")) {
+        } else if (args.contains(RANGE_SEPARATOR)) {
             String[] indices = args.trim().split("~");
             List<Index> indexes = new ArrayList<>();
             for (int i = Integer.parseInt(indices[0]); i <= Integer.parseInt(indices[1]); i++) {
@@ -398,9 +401,11 @@ public class ListSizeEvent extends BaseEvent {
     @Subscribe
     private void handleNewListResultAvailable(ListSizeEvent event) {
         Label listSizeLabel = new Label(event.toString());
-        listSizeLabel.setStyle("-fx-background-color: #00bf00;"
+        listSizeLabel.setStyle("-fx-background-color: #6965d3;"
                 + " -fx-background-radius: 80 80 80 80;"
-                + " -fx-background-size: 35px");
+                + " -fx-background-size: 35px;"
+                + " -fx-text-fill: #ffffff;"
+                + " -fx-label-padding: 5 5 5 5");
         listSizeDisplay.getChildren().setAll(listSizeLabel);
     }
 

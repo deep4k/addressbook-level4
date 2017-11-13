@@ -52,6 +52,7 @@ public class TutorialMessages {
             + "4. findpinned\n"
             + "5. list\n"
             + "6. listpin\n"
+            + "7. showbirthdays\n"
             + "7. remark\n"
             + "8. sort\n"
             + "9. history\n"
@@ -1407,6 +1408,7 @@ public class AliasListPanel extends UiPart<Region> {
 ```
 ###### \java\seedu\address\ui\ResultDisplay.java
 ``` java
+    private static final String BIRTHDAY_ICON = "/images/BirthdayBird.png";
     private static final String DELETE_ICON = "/images/DeleteBird.png";
     private static final String EDIT_ICON = "/images/EditBird.png";
     private static final String ERROR_ICON = "/images/ErrorBird.png";
@@ -1449,6 +1451,9 @@ public class AliasListPanel extends UiPart<Region> {
         case "task":
             listSizeDisplay.setVisible(false);
             imageDisplay.setImage(new Image(TASK_ICON));
+            break;
+        case "showbirthdays":
+            imageDisplay.setImage(new Image(BIRTHDAY_ICON));
             break;
         case "undo":
             listSizeDisplay.setVisible(false);
@@ -1512,6 +1517,9 @@ public class SortFindPanel extends UiPart<Region> {
 
     @FXML
     private MenuItem addressItem;
+
+    @FXML
+    private ImageView findIcon;
 
     public SortFindPanel(Logic logic) {
         super(FXML);
@@ -1650,11 +1658,22 @@ public class SortFindPanel extends UiPart<Region> {
     }
 
     /**
+     * Switches style to person view.
+     */
+    private void switchToPersonView() {
+        searchBox.setPromptText("Search Person...");
+        sortMenu.setVisible(true);
+        searchBox.setVisible(true);
+        findIcon.setVisible(true);
+    }
+
+    /**
      * Switches style to alias view.
      */
     private void switchToAliasView() {
         searchBox.setVisible(false);
         sortMenu.setVisible(false);
+        findIcon.setVisible(false);
     }
 
     /**
@@ -1681,16 +1700,7 @@ public class SortFindPanel extends UiPart<Region> {
         searchBox.setPromptText("Search Task...");
         sortMenu.setVisible(false);
         searchBox.setVisible(true);
-    }
-
-    /**
-     * Switches style to person view.
-     */
-    private void switchToPersonView() {
-        searchBox.setText("");
-        searchBox.setPromptText("Search Person...");
-        sortMenu.setVisible(true);
-        searchBox.setVisible(true);
+        findIcon.setVisible(true);
     }
 
     public MenuButton getSortMenu() {
@@ -1958,9 +1968,9 @@ public class TutorialPanel extends UiPart<Region> {
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="aliasListPanel" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane gridLinesVisible="true">
+      <GridPane>
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1969,8 +1979,8 @@ public class TutorialPanel extends UiPart<Region> {
           <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <Label style="-fx-text-fill: white;" text="  Representation" />
-            <Label style="-fx-text-fill: white;" text="  Keyword" GridPane.columnIndex="1" />
+            <Label fx:id="representationLabel" style="-fx-text-fill: white;" text="  Representation" />
+            <Label fx:id="keywordLabel" style="-fx-text-fill: white;" text="  Keyword" GridPane.columnIndex="1" />
          </children>
       </GridPane>
       <ListView fx:id="aliasListView" VBox.vgrow="ALWAYS" />
@@ -1979,66 +1989,96 @@ public class TutorialPanel extends UiPart<Region> {
 ```
 ###### \resources\view\MainWindow.fxml
 ``` fxml
-                              <GridPane cacheShape="false" centerShape="false" minHeight="-Infinity" prefWidth="601.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="0.0" prefWidth="59.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="614.0" minWidth="0.0" prefWidth="47.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="614.0" minWidth="10.0" prefWidth="230.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="339.0" minWidth="0.0" prefWidth="40.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="583.0" minWidth="10.0" prefWidth="234.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="0.0" prefWidth="86.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" prefWidth="49.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <Label fx:id="personViewLabel" onMouseReleased="#handlePersonViewClicked" style="-fx-text-fill: white;" text="Person">
-                                       <GridPane.margin>
-                                          <Insets bottom="5.0" left="5.0" />
-                                       </GridPane.margin>
-                                    </Label>
-                                    <Label fx:id="taskViewLabel" onMouseReleased="#handleTaskViewClicked" text="Task" GridPane.columnIndex="1">
-                                       <GridPane.margin>
-                                          <Insets bottom="5.0" left="10.0" />
-                                       </GridPane.margin>
-                                    </Label>
-                                    <Label fx:id="listAllLabel" onMouseReleased="#handleListAllClicked" style="-fx-text-fill: white;" text="All" GridPane.columnIndex="3">
-                                       <GridPane.margin>
-                                          <Insets bottom="5.0" left="10.0" />
-                                       </GridPane.margin>
-                                    </Label>
-                                    <Label fx:id="listPinLabel" onMouseReleased="#handleListPinnedClicked" text="Pinned" GridPane.columnIndex="4">
-                                       <GridPane.margin>
-                                          <Insets bottom="5.0" left="10.0" />
-                                       </GridPane.margin>
-                                    </Label>
-                                    <Label fx:id="organizerLabel" prefHeight="21.0" prefWidth="76.0" style="-fx-text-fill: white;" text="Sorted By:" GridPane.columnIndex="5">
-                                       <GridPane.margin>
-                                          <Insets bottom="5.0" />
-                                       </GridPane.margin>
-                                    </Label>
-                                    <Label fx:id="organizedByLabel" prefHeight="21.0" prefWidth="149.0" style="-fx-text-fill: white;" text="Name" GridPane.columnIndex="6">
-                                       <GridPane.margin>
-                                          <Insets bottom="5.0" left="2.0" />
-                                       </GridPane.margin>
-                                    </Label>
-                                    <Label fx:id="aliasViewLabel" onMouseReleased="#handleAliasViewClicked" text="Alias" visible="false" GridPane.columnIndex="2">
-                                       <GridPane.margin>
-                                          <Insets bottom="5.0" left="10.0" />
-                                       </GridPane.margin>
-                                    </Label>
-                                 </children>
-                              </GridPane>
+                                        <GridPane alignment="CENTER" cacheShape="false" centerShape="false" minHeight="-Infinity" prefWidth="601.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="0.0" prefWidth="59.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="614.0" minWidth="0.0" prefWidth="47.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="614.0" minWidth="10.0" prefWidth="230.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="339.0" minWidth="0.0" prefWidth="40.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="583.0" minWidth="10.0" prefWidth="234.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="0.0" prefWidth="86.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" prefWidth="49.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label fx:id="personViewLabel" graphicTextGap="0.0" onMouseReleased="#handlePersonViewClicked" style="-fx-text-fill: white;" text="Person">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" />
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Label fx:id="taskViewLabel" onMouseReleased="#handleTaskViewClicked" text="Task" GridPane.columnIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="10.0" />
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Label fx:id="listAllLabel" graphicTextGap="0.0" onMouseReleased="#handleListAllClicked" style="-fx-text-fill: white;" text="All" GridPane.columnIndex="3">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="10.0" />
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Label fx:id="listPinLabel" graphicTextGap="0.0" onMouseReleased="#handleListPinnedClicked" text="Pinned" GridPane.columnIndex="4">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="10.0" />
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Label fx:id="organizerLabel" alignment="CENTER_RIGHT" graphicTextGap="0.0" style="-fx-text-fill: white;" text="Sorted By:" GridPane.columnIndex="5">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" />
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Label fx:id="organizedByLabel" graphicTextGap="0.0" style="-fx-text-fill: white;" text="Name" GridPane.columnIndex="6">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="2.0" />
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Label fx:id="aliasViewLabel" graphicTextGap="0.0" onMouseReleased="#handleAliasViewClicked" text="Alias" visible="false" GridPane.columnIndex="2">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="10.0" />
+                                                    </GridPane.margin>
+                                                </Label>
+                                            </children>
+                                            <padding>
+                                                <Insets right="6.0" top="6.0" />
+                                            </padding>
+                                        </GridPane>
+                                    </children>
+                                </VBox>
+                                <StackPane fx:id="tutorialPlaceholder" maxWidth="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="CENTER_RIGHT">
+                                    <StackPane.margin>
+                                        <Insets bottom="20.0" right="350.0" top="50.0" />
+                                    </StackPane.margin>
+                                </StackPane>
+                            </children>
+                        </StackPane>
+                    </items>
+                </SplitPane>
+                <StackPane fx:id="resultDisplayPlaceholder" prefHeight="140.0" prefWidth="1249.0" styleClass="pane-with-border" VBox.vgrow="NEVER">
+                    <padding>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                    </padding>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </StackPane>
+                <StackPane fx:id="commandBoxPlaceholder" styleClass="pane-with-border" VBox.vgrow="NEVER">
+                    <padding>
+                        <Insets bottom="5" left="10" right="10" top="5" />
+                    </padding>
+                </StackPane>
+                <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
+            </children>
+        </VBox>
 ```
 ###### \resources\view\MainWindow.fxml
 ``` fxml
-      <ScrollPane fx:id="helpOverlay" fitToHeight="true" fitToWidth="true" opacity="0.9" pannable="true" visible="false" StackPane.alignment="TOP_CENTER">
-         <StackPane.margin>
-            <Insets bottom="310.0" left="8.0" right="8.0" top="40.0" />
-         </StackPane.margin>
+        <ScrollPane fx:id="helpOverlay" fitToHeight="true" fitToWidth="true" opacity="0.9" pannable="true" visible="false" StackPane.alignment="TOP_CENTER">
+            <StackPane.margin>
+                <Insets bottom="310.0" left="8.0" right="8.0" top="40.0" />
+            </StackPane.margin>
          <content>
-            <GridPane fx:id="overlayGrid" alignment="TOP_CENTER" blendMode="SRC_ATOP" maxWidth="1.7976931348623157E308" style="-fx-background-color: derive(#1d1d1d, 20%);">
+            <GridPane fx:id="overlayGrid" alignment="TOP_CENTER" blendMode="SRC_ATOP" maxWidth="1.7976931348623157E308">
                <columnConstraints>
                   <ColumnConstraints hgrow="ALWAYS" maxWidth="200.0" minWidth="200.0" />
                   <ColumnConstraints hgrow="ALWAYS" minWidth="1100.0" />
@@ -2108,7 +2148,7 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label prefHeight="45.0" prefWidth="586.0" text="Command" textAlignment="CENTER" textFill="#bdadff" GridPane.rowIndex="1">
+                  <Label fx:id="commandHelp" prefHeight="45.0" prefWidth="586.0" text="Command" textAlignment="CENTER" textFill="#bdadff" GridPane.rowIndex="1">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -2116,17 +2156,17 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="45.0" prefWidth="1346.0" text="Example" textFill="#bdadff" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Label fx:id="ExampleHelp" alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="45.0" prefWidth="1346.0" text="Example" textFill="#bdadff" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="clear" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="clear" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="delete 2" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="delete 2" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2171,37 +2211,37 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="edit 1 p/91234567 e/johndoe@example.com" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="edit 1 p/91234567 e/johndoe@example.com" GridPane.columnIndex="1" GridPane.rowIndex="7">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="find alice bob charlie" GridPane.columnIndex="1" GridPane.rowIndex="16">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="find alice bob charlie" GridPane.columnIndex="1" GridPane.rowIndex="16">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="list" GridPane.columnIndex="1" GridPane.rowIndex="22">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="list" GridPane.columnIndex="1" GridPane.rowIndex="22">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="listpin" GridPane.columnIndex="1" GridPane.rowIndex="23">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="listpin" GridPane.columnIndex="1" GridPane.rowIndex="23">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="help" GridPane.columnIndex="1" GridPane.rowIndex="26">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="help" GridPane.columnIndex="1" GridPane.rowIndex="26">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="select 3" GridPane.columnIndex="1" GridPane.rowIndex="27">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="select 3" GridPane.columnIndex="1" GridPane.rowIndex="27">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="history" GridPane.columnIndex="1" GridPane.rowIndex="28">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="history" GridPane.columnIndex="1" GridPane.rowIndex="28">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2230,22 +2270,22 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="sort phone" GridPane.columnIndex="1" GridPane.rowIndex="29">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="sort phone" GridPane.columnIndex="1" GridPane.rowIndex="29">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="undo" GridPane.columnIndex="1" GridPane.rowIndex="30">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="undo" GridPane.columnIndex="1" GridPane.rowIndex="30">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="redo" GridPane.columnIndex="1" GridPane.rowIndex="31">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="redo" GridPane.columnIndex="1" GridPane.rowIndex="31">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="hide 3" GridPane.columnIndex="1" GridPane.rowIndex="20">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="hide 3" GridPane.columnIndex="1" GridPane.rowIndex="20">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2306,22 +2346,22 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="alias k/ph s/ Public Holiday" GridPane.columnIndex="1" GridPane.rowIndex="18">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="alias k/ph s/ Public Holiday" GridPane.columnIndex="1" GridPane.rowIndex="18">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="unalias k/ph" GridPane.columnIndex="1" GridPane.rowIndex="19">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="unalias k/ph" GridPane.columnIndex="1" GridPane.rowIndex="19">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="pin 2" GridPane.columnIndex="1" GridPane.rowIndex="14">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="pin 2" GridPane.columnIndex="1" GridPane.rowIndex="14">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="unpin 1" GridPane.columnIndex="1" GridPane.rowIndex="15">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="unpin 1" GridPane.columnIndex="1" GridPane.rowIndex="15">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2342,7 +2382,7 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="person" GridPane.columnIndex="1" GridPane.rowIndex="32">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="person" GridPane.columnIndex="1" GridPane.rowIndex="32">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2355,7 +2395,7 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="task" GridPane.columnIndex="1" GridPane.rowIndex="33">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="task" GridPane.columnIndex="1" GridPane.rowIndex="33">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2368,12 +2408,12 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="parent" GridPane.columnIndex="1" GridPane.rowIndex="35">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="parent" GridPane.columnIndex="1" GridPane.rowIndex="35">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="child" GridPane.columnIndex="1" GridPane.rowIndex="36">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="child" GridPane.columnIndex="1" GridPane.rowIndex="36">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2394,12 +2434,12 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="add n/John Doe [p/98765432] [e/johnd@example.com] [a/311, Clementi Ave 2, #02-25] [b/22/08/1993] [t/friends] [t/owesMoney]" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 b/22/08/1993 t/friends t/owesMoney" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="add Go Fishing from 9am to 11am" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="add Go Fishing from 9am to 11am" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2420,12 +2460,12 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="rename 2 Football training" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="rename 2 Football training" GridPane.columnIndex="1" GridPane.rowIndex="8">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="reschedule 1 from 8am to 12pm" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="reschedule 1 from 8am to 12pm" GridPane.columnIndex="1" GridPane.rowIndex="10">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2438,7 +2478,7 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="listalias" GridPane.columnIndex="1" GridPane.rowIndex="24">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="listalias" GridPane.columnIndex="1" GridPane.rowIndex="24">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2459,12 +2499,12 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="mark 1~3" GridPane.columnIndex="1" GridPane.rowIndex="11">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="mark 1~3" GridPane.columnIndex="1" GridPane.rowIndex="11">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </TextField>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="unmark 1~3" GridPane.columnIndex="1" GridPane.rowIndex="12">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="unmark 1~3" GridPane.columnIndex="1" GridPane.rowIndex="12">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2477,7 +2517,7 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="findpinned bala" GridPane.columnIndex="1" GridPane.rowIndex="17">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="findpinned bala" GridPane.columnIndex="1" GridPane.rowIndex="17">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2490,7 +2530,7 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="exit" GridPane.columnIndex="1" GridPane.rowIndex="37">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="exit" GridPane.columnIndex="1" GridPane.rowIndex="37">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2503,7 +2543,7 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="remark 1 r/Likes to swim." GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="remark 1 r/Likes to swim" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2516,7 +2556,7 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="unhide 1" GridPane.columnIndex="1" GridPane.rowIndex="21">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="unhide 1" GridPane.columnIndex="1" GridPane.rowIndex="21">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2529,7 +2569,7 @@ public class TutorialPanel extends UiPart<Region> {
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #bdadff;" text="listhidden" GridPane.columnIndex="1" GridPane.rowIndex="25">
+                  <TextField alignment="CENTER" editable="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="listhidden" GridPane.columnIndex="1" GridPane.rowIndex="25">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -2537,7 +2577,7 @@ public class TutorialPanel extends UiPart<Region> {
                </children>
             </GridPane>
          </content>
-      </ScrollPane>
+        </ScrollPane>
 ```
 ###### \resources\view\ResultDisplay.fxml
 ``` fxml
@@ -2550,26 +2590,50 @@ public class TutorialPanel extends UiPart<Region> {
 ###### \resources\view\SortFindPanel.fxml
 ``` fxml
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+
+<HBox fx:id="sortMenuBox" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <MenuButton fx:id="sortMenu" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="Sort By:">
+      <ImageView fx:id="findIcon" fitHeight="40.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/search.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="searchBox" onKeyReleased="#handleSearchFieldChanged" prefHeight="40.0" prefWidth="167.0" promptText="Search Person..." />
+      <MenuButton fx:id="sortMenu" mnemonicParsing="false">
         <items>
           <MenuItem fx:id="nameItem" mnemonicParsing="false" onAction="#handleNameItemPressed" text="Name" />
           <MenuItem fx:id="phoneItem" mnemonicParsing="false" onAction="#handlePhoneItemPressed" text="Phone" />
             <MenuItem fx:id="emailItem" mnemonicParsing="false" onAction="#handleEmailItemPressed" text="Email" />
             <MenuItem fx:id="addressItem" mnemonicParsing="false" onAction="#handleAddressItemPressed" text="Address" />
         </items>
+         <stylesheets>
+            <URL value="@DarkTheme.css" />
+            <URL value="@Extensions.css" />
+         </stylesheets>
+         <graphic>
+            <ImageView fitHeight="30.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/sort.png" />
+               </image>
+            </ImageView>
+         </graphic>
       </MenuButton>
-      <TextField fx:id="searchBox" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#handleSearchFieldChanged" prefHeight="32.0" prefWidth="149.0" promptText="Search Person..." />
    </children>
    <padding>
       <Insets left="10.0" top="3.0" />
    </padding>
+   <stylesheets>
+      <URL value="@DarkTheme.css" />
+      <URL value="@Extensions.css" />
+   </stylesheets>
 </HBox>
 ```
 ###### \resources\view\TutorialPanel.fxml

@@ -114,7 +114,7 @@ public class PersonPanelSelectionChangedEvent extends BaseEvent {
 ###### \java\seedu\address\logic\commands\alias\AliasCommand.java
 ``` java
 /**
- * Command to create aliases
+ * Command to create an alias command
  */
 public class AliasCommand extends UndoableCommand {
 
@@ -300,6 +300,7 @@ public class EnableTaskCommand extends Command {
 ```
 ###### \java\seedu\address\logic\commands\person\RemarkCommand.java
 ``` java
+
 /**
  * Changes the remark of an existing person in the address book.
  */
@@ -323,6 +324,8 @@ public class RemarkCommand extends UndoableCommand {
     private final Remark remark;
 
     /**
+     * Constructor for a remark command
+     *
      * @param index  of the person in the filtered person list to edit the remark
      * @param remark of the person
      */
@@ -360,8 +363,7 @@ public class RemarkCommand extends UndoableCommand {
     }
 
     /**
-     * @param personToEdit
-     * @return
+     * Returns the result message of the remark command made to {@code PersonToEdit}
      */
     private String generateSuccessMessage(ReadOnlyPerson personToEdit) {
         if (!remark.value.isEmpty()) {
@@ -585,6 +587,7 @@ public class DeleteTaskCommand extends UndoableCommand {
         for (ReadOnlyTask toAppend : tasksToDelete) {
             builder.append("\n" + toAppend.toString());
         }
+        EventsCenter.getInstance().post(new ListSizeEvent(tasksToDelete.size()));
         return new CommandResult(String.format(MESSAGE_DELETE_TASK_SUCCESS, builder));
     }
 
@@ -620,6 +623,7 @@ public class FindTaskCommand extends Command {
     @Override
     public CommandResult execute() {
         model.updateFilteredTaskList(predicate);
+        EventsCenter.getInstance().post(new ListSizeEvent(model.getFilteredTaskList().size()));
         return new CommandResult(getMessageForTaskListShownSummary(model.getFilteredTaskList().size()));
     }
 
@@ -645,6 +649,7 @@ public class ListTaskCommand extends Command {
 
     @Override
     public CommandResult execute() {
+        EventsCenter.getInstance().post(new ListSizeEvent(model.getFilteredTaskList().size()));
         model.updateFilteredTaskList(PREDICATE_SHOW_ALL_TASKS);
         return new CommandResult(MESSAGE_SUCCESS);
     }
@@ -819,9 +824,6 @@ public class RescheduleTaskCommand extends UndoableCommand {
     private Optional<LocalDateTime> newStartDateTime = Optional.empty();
     private Optional<LocalDateTime> newEndDateTime = Optional.empty();
 
-    /**
-     * Empty Constructor
-     */
     public RescheduleTaskCommand() {
     }
 
@@ -3920,6 +3922,7 @@ class TimeClock extends Label {
 ```
 ###### \java\seedu\address\ui\TaskCard.java
 ``` java
+
 /**
  * UI component that displays information of a {@code Task}.
  */
@@ -3935,12 +3938,8 @@ public class TaskCard extends UiPart<Region> {
     private static final String DEADLINE_PREFIX = "by ";
     private static final String EMPTY_PREFIX = "";
     private static final String OVERDUE_STYLE = "-fx-background-color: rgba(244, 67, 54, 0.8)";
-    private static final String UPCOMING_STYLE = "-fx-background-color: rgba(170,181,46,0.8)";
-    private static final String OTHER_STYLE = "-fx-background-color: rgba(7,38,255,0.51)";
-    private static final Color NAME_COLOR_DARK = Color.web("#3a3d42");
-    private static final Color TIME_COLOR_DARK = Color.web("#4172c1");
-    private static final Color NAME_COLOR_LIGHT = Color.web("#ffffff");
-    private static final Color TIME_COLOR_LIGHT = Color.web("#fff59d");
+    private static final String UPCOMING_STYLE = "-fx-background-color: rgba(101,181,122,0.8)";
+    private static final String OTHER_STYLE = "-fx-background-color: rgba(42,47,79,0.51)";
 
     private final ReadOnlyTask task;
 
@@ -3980,17 +3979,10 @@ public class TaskCard extends UiPart<Region> {
 
         if (task.isOverdue()) {
             cardPane.setStyle(OVERDUE_STYLE);
-            header.setTextFill(NAME_COLOR_LIGHT);
-            time.setTextFill(TIME_COLOR_LIGHT);
-            id.setTextFill(NAME_COLOR_LIGHT);
         } else if (task.isUpcoming()) {
             cardPane.setStyle(UPCOMING_STYLE);
-            header.setTextFill(NAME_COLOR_DARK);
-            time.setTextFill(TIME_COLOR_DARK);
         } else {
             cardPane.setStyle(OTHER_STYLE);
-            header.setTextFill(NAME_COLOR_DARK);
-            time.setTextFill(TIME_COLOR_DARK);
         }
 
         StringBuilder timeDescription = new StringBuilder();
@@ -4164,8 +4156,1030 @@ public class TaskListPanel extends UiPart<Region> {
     }
 }
 ```
+###### \resources\view\BluebirdTheme.css
+``` css
+/* ========== FONTS ==========*/
+@font-face {
+    font-family: Old Standard TT;
+    src: url("/fonts/OldStandard-Regular.ttf");
+}
+
+/* ========== JAVAFX ELEMENTS ==========*/
+
+.pane-with-border {
+    -fx-background-color: #1a1e37;
+    -fx-border-color: transparent;
+    -fx-border-top-width: 1px;
+}
+
+/* ========== MENU BAR ==========*/
+.context-menu {
+    -fx-background-color: #1a1e37;
+}
+
+.context-menu .label {
+    -fx-text-fill: white;
+}
+
+.menu-bar {
+    -fx-background-color: #1a1e37;
+}
+
+.menu-bar .label {
+    -fx-background-color: #1a1e37;
+    -fx-font-size: 12pt;
+    -fx-font-family: "Old Standard TT";
+    -fx-text-fill: #fffefd;
+}
+
+.menu:showing{
+    -fx-background-color: transparent;
+}
+
+.menu:hover{
+    -fx-background-color: transparent;
+}
+
+.menu:hover .label {
+    -fx-text-fill: #71ffa0;
+}
+
+.menu:showing .label {
+    -fx-text-fill: #71ffa0;
+}
+
+.menu-item:focused {
+    -fx-background-color: transparent;
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: #71ffa0;
+}
+
+/* ========== COMMAND BOX ==========*/
+
+.command-pane {
+    -fx-background-color: derive(#222646, 10%);
+    -fx-background-radius: 10 10 10 10;
+}
+
+#commandTypeLabel {
+    -fx-font-size: 11px;
+    -fx-text-fill: #F70D1A;
+}
+
+#commandTextField {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-width: 1;
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 13pt;
+    -fx-text-fill: derive(#71ffa0,-20%);
+}
+
+/* ========== STATUS BAR ==========*/
+.status-bar .label {
+    -fx-font-family: "Old Standard TT";
+    -fx-text-fill: white;
+    -fx-font-size: 10pt;
+}
+
+.status-bar-with-border {
+    -fx-background-color: derive(#1d1d1d, 30%);
+    -fx-border-color: derive(#1d1d1d, 25%);
+    -fx-border-width: 1px;
+}
+
+.status-bar-with-border .label {
+    -fx-text-fill: white;
+}
+
+.grid-pane {
+    -fx-background-color: #1a1e37;
+}
+
+.grid-pane .anchor-pane {
+    -fx-background-color: #1a1e37;
+}
+
+.anchor-pane {
+    -fx-background-color: transparent;
+}
+
+/* ========== SCROLL BAR ==========*/
+
+.status-bar {
+    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-text-fill: black;
+}
+
+
+.scroll-bar {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #1a1e37;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-insets: 3;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+}
+
+.scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 1 8 1 8;
+}
+
+.scroll-bar:horizontal .increment-arrow, .scroll-bar:horizontal .decrement-arrow {
+    -fx-padding: 8 1 8 1;
+}
+
+/* ========== SORT/SEARCH  MID-BAR ==========*/
+#sortMenuBox .context.menu {
+    -fx-background-color: #1a1e37;
+}
+
+.menu-button {
+    -fx-background-color: #1a1e37;
+}
+
+.menu-button:hover .label {
+    -fx-text-fill: #71ffa0;
+}
+
+.menu-button:showing .label {
+    -fx-text-fill: #fefdff;
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: #71ffa0;
+}
+
+.menu-button:hover .arrow {
+    -fx-background-color:  #71ffa0;
+}
+
+.menu-button:showing .arrow {
+    -fx-background-color:  #71ffa0;
+}
+
+#sortMenuBox .label {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Old Standard TT";
+}
+
+#searchBox {
+    -fx-background-color: #1a1e37;
+}
+
+#sortMenuBox .text-field {
+    -fx-background-color:#1a1e37;
+    -fx-font-size: 12pt;
+    -fx-font-family: "Old Standard TT";
+    -fx-text-fill: derive(#71ffa0,-20%);
+
+}
+
+/* ========== ORGANIZER PANE ==========*/
+
+#personList {
+    -fx-background-color:#1a1e37;
+    -fx-border-color: transparent;
+}
+
+#personViewLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#taskViewLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#aliasViewLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#listAllLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#listPinLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#organizedByLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#organizerLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+/* ========== MAIN SPLIT PANE ==========*/
+.split-pane:horizontal .split-pane-divider {
+    -fx-background-color: #1a1e37;
+    -fx-border-color: transparent;
+}
+
+.split-pane:vertical .split-pane-divider {
+    -fx-background-color: white;
+    -fx-padding: 0.000001;
+}
+
+.split-pane:vertical .label {
+    -fx-text-fill: white;
+}
+
+.split-pane {
+    -fx-background-color: #1a1e37;
+}
+
+/* ========== PERSON LIST PANEL ==========*/
+
+#personListPanelPlaceholder {
+    -fx-border-color: transparent;
+}
+
+#personListView {
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#personListPanel {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+/* ========== LIST CARD ==========*/
+
+.list-view {
+    -fx-background-insets: 0;
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.list-cell {
+    -fx-label-padding: 0 0 0 0;
+    -fx-graphic-text-gap: 0;
+    -fx-padding: 0 0 0 0;
+    -fx-background-color: derive(#1a1e37, 20%);
+}
+
+.list-cell:filled:even {
+    -fx-background-color: derive(#1a1e37, 20%);
+}
+
+.list-cell:filled:odd {
+    -fx-background-color: derive(#1a1e37, 30%);
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #1a1e37;
+    -fx-background-radius: 10 10 10 10;
+}
+
+.list-cell:filled:selected #cardPane {
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+}
+
+.list-cell .label {
+    -fx-font-family: "Space mono";
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+}
+
+.cell_big_label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 16px;
+    -fx-text-fill: #010504;
+}
+
+.cell_small_label {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-text-fill: #010504;
+}
+
+.anchor-pane {
+    -fx-background-color: transparent;
+}
+
+#cardPane {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+/* ========== PERSON CARD ==========*/
+#name {
+    -fx-font-size: 15px;
+}
+
+#remark {
+    -fx-font-family: "Space Mono Italic";
+    -fx-text-fill: gray;
+}
+
+#tags {
+    -fx-hgap: 7;
+    -fx-vgap: 3;
+}
+
+#tags .label {
+    -fx-text-fill: white;
+    -fx-background-color: #3e7b91;
+    -fx-padding: 1 3 1 3;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-font-size: 11;
+}
+
+
+/* ========== TASK CARD ==========*/
+#taskListView {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#taskListPanel {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#time {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 12px;
+
+}
+
+#time {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 12px;
+    -fx-text-fill: gold;
+
+}
+
+#header {
+    -fx-font-size: 15px;
+}
+
+/* ========== ALIAS CARD ==========*/
+#aliasListView {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#aliasListPanel {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#representation {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 15px;
+}
+
+#keyword {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 15px;
+}
+
+#representationLabel {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 15px;
+}
+
+#keywordLabel {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 15px;
+}
+
+
+```
+###### \resources\view\DarkTheme.css
+``` css
+/* refer to BluebirdTheme.css for clearer separation between regions*/
+@font-face {
+    font-family: Space Mono;
+    src: url("/fonts/SpaceMono-Regular.ttf");
+}
+
+@font-face {
+    font-family: Old Standard TT;
+    src: url("/fonts/OldStandard-Regular.ttf");
+}
+
+@font-face {
+    font-family: Space Mono Italic;
+    src: url("/fonts/SpaceMono-Italic.ttf");
+}
+
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #555555;
+    -fx-opacity: 0.9;
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 32pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.text-field {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+.tab-pane {
+    -fx-padding: 0 0 0 1;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+}
+
+.table-view {
+    -fx-base: #1d1d1d;
+    -fx-control-inner-background: #1d1d1d;
+    -fx-background-color: #1d1d1d;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent derive(-fx-base, 80%) transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+.split-pane:horizontal .split-pane-divider {
+    -fx-background-color: #1a1e37;
+    -fx-border-color: transparent;
+}
+
+.split-pane:vertical .split-pane-divider {
+    -fx-background-color: white;
+    -fx-padding: 0.000001;
+}
+
+.split-pane:vertical .label {
+    -fx-text-fill: white;
+}
+
+.split-pane {
+    -fx-background-color: #1a1e37;
+}
+
+.list-view {
+    -fx-background-insets: 0;
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.list-cell {
+    -fx-label-padding: 0 0 0 0;
+    -fx-graphic-text-gap: 0;
+    -fx-padding: 0 0 0 0;
+    -fx-background-color: derive(#1a1e37, 20%);
+}
+
+.list-cell:filled:even {
+    -fx-background-color: derive(#1a1e37, 20%);
+}
+
+.list-cell:filled:odd {
+    -fx-background-color: derive(#1a1e37, 30%);
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #1a1e37;
+    -fx-background-radius: 10 10 10 10;
+}
+
+.list-cell:filled:selected #cardPane {
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+}
+
+.list-cell .label {
+    -fx-font-family: "Space mono";
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+}
+
+.cell_big_label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 16px;
+    -fx-text-fill: #010504;
+}
+
+.cell_small_label {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-text-fill: #010504;
+}
+
+.anchor-pane {
+    -fx-background-color: transparent;
+}
+
+.pane-with-border {
+    -fx-background-color: #1a1e37;
+    -fx-border-color: transparent;
+    -fx-border-top-width: 1px;
+}
+
+.status-bar {
+    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-text-fill: black;
+}
+
+.result-display {
+    -fx-background-color: transparent;
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 13pt;
+    -fx-text-fill: white;
+}
+
+.result-display *.text {
+    -fx-text-alignment: center;
+}
+
+.result-display .label {
+    -fx-text-fill: black !important;
+}
+
+.status-bar .label {
+    -fx-font-family: "PT Serif";
+    -fx-text-fill: white;
+    -fx-font-size: 9pt;
+}
+
+.status-bar-with-border {
+    -fx-background-color: derive(#1d1d1d, 30%);
+    -fx-border-color: derive(#1d1d1d, 25%);
+    -fx-border-width: 1px;
+}
+
+.status-bar-with-border .label {
+    -fx-text-fill: white;
+}
+
+.grid-pane {
+    -fx-background-color: #1a1e37;
+}
+
+.grid-pane .anchor-pane {
+    -fx-background-color: #1a1e37;
+}
+
+.context-menu {
+    -fx-background-color: #1a1e37;
+}
+
+.context-menu .label {
+    -fx-text-fill: white;
+}
+
+.menu-bar {
+    -fx-background-color: #1a1e37;
+}
+
+.menu-bar .label {
+    -fx-background-color: #1a1e37;
+    -fx-font-size: 12pt;
+    -fx-font-family: "PT Serif";
+    -fx-text-fill: #fffefd;
+}
+
+.menu:showing {
+    -fx-background-color: transparent;
+}
+
+.menu:hover {
+    -fx-background-color: transparent;
+}
+
+.menu:hover .label {
+    -fx-text-fill: #71ffa0;
+}
+
+.menu:showing .label {
+    -fx-text-fill: #fefdff;
+}
+
+.menu-item:focused {
+    -fx-background-color: transparent;
+}
+
+.context-menu .button {
+    -fx-background-color: #1a1e37;
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: #71ffa0;
+}
+
+/*
+ * Metro style Push Button
+ * Author: Pedro Duque Vieira
+ * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
+ */
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #e2e2e2;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #1d1d1d;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button:hover {
+    -fx-background-color: #3a3a3a;
+}
+
+.button:pressed, .button:default:hover:pressed {
+    -fx-background-color: white;
+    -fx-text-fill: #1d1d1d;
+}
+
+.button:focused {
+    -fx-border-color: white, white;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #1d1d1d;
+    -fx-text-fill: white;
+}
+
+.button:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.button:default:hover {
+    -fx-background-color: derive(-fx-focus-color, 30%);
+}
+
+.dialog-pane {
+    -fx-background-color: #1d1d1d;
+}
+
+.dialog-pane > *.button-bar > *.container {
+    -fx-background-color: #1d1d1d;
+}
+
+.dialog-pane > *.label.content {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.dialog-pane:header *.header-panel {
+    -fx-background-color: derive(#1d1d1d, 25%);
+}
+
+.dialog-pane:header *.header-panel *.label {
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+.scroll-bar {
+    -fx-background-color: derive(#1a1e37, 20%);
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #1a1e37;
+    -fx-background-radius: 18 18 18 18;
+    -fx-background-insets: 1;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+}
+
+.scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 8 3 8 3;
+}
+
+.scroll-bar:horizontal .increment-arrow, .scroll-bar:horizontal .decrement-arrow {
+    -fx-padding: 3 8 3 8;
+}
+
+#cardPane {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+.command-pane {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+}
+
+#commandTypeLabel {
+    -fx-font-size: 11px;
+    -fx-text-fill: #F70D1A;
+}
+
+#commandTextField {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-width: 1;
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 13pt;
+    -fx-text-fill: derive(#71ffa0, -20%);
+}
+
+#resultDisplay {
+    -fx-font-size: 18;
+}
+
+#resultDisplay .content {
+    -fx-background-color: #1a1e37;
+    -fx-background-radius: 0;
+}
+
+#tags {
+    -fx-hgap: 7;
+    -fx-vgap: 3;
+}
+
+#tags .label {
+    -fx-text-fill: papayawhip;
+    -fx-background-color: #3e7b91;
+    -fx-padding: 1 3 1 3;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-font-size: 11;
+}
+
+#sortMenuBox .context.menu {
+    -fx-background-color: #1a1e37;
+}
+
+.menu-button {
+    -fx-background-color: #1a1e37;
+}
+
+.menu-button:hover .label {
+    -fx-text-fill: #71ffa0;
+}
+
+.menu-button:showing .label {
+    -fx-text-fill: #fefdff;
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: #71ffa0;
+}
+
+.menu-button:hover .arrow {
+    -fx-background-color: #71ffa0;
+}
+
+.menu-button:showing .arrow {
+    -fx-background-color: #71ffa0;
+}
+
+#sortMenuBox .label {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Old Standard TT";
+}
+
+#searchBox {
+    -fx-background-color: #1a1e37;
+}
+
+#sortMenuBox .text-field {
+    -fx-background-color: #1a1e37;
+    -fx-font-size: 12pt;
+    -fx-font-family: "Old Standard TT";
+    -fx-text-fill: derive(#71ffa0, -20%);
+
+}
+
+#personList {
+    -fx-background-color: #1a1e37;
+    -fx-border-color: transparent;
+}
+
+#personViewLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#taskViewLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#aliasViewLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#listAllLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#listPinLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#organizedByLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#organizerLabel {
+    -fx-font-family: "Old Standard TT";
+    -fx-font-size: 10pt;
+}
+
+#personListPanelPlaceholder {
+    -fx-border-color: transparent;
+}
+
+#personListView {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#personListPanel {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#name {
+    -fx-font-size: 15px;
+}
+
+#remark {
+    -fx-font-family: "Space Mono Italic";
+    -fx-text-fill: gray;
+}
+
+#taskListView {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#taskListPanel {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#time {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 12px;
+
+}
+
+#time {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 12px;
+    -fx-text-fill: gold;
+}
+
+#header {
+    -fx-font-size: 15px;
+}
+
+#aliasListView {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#aliasListPanel {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-color: transparent;
+}
+
+#representation {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 15px;
+}
+
+#keyword {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 15px;
+}
+
+#representationLabel {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 15px;
+}
+
+#keywordLabel {
+    -fx-font-family: "Space Mono Italic";
+    -fx-font-size: 15px;
+}
+
+#overlayGrid {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-border-color: transparent;
+}
+
+#helpOverlay {
+    -fx-background-color: derive(#1a1e37, 20%);
+    -fx-border-color: transparent;
+}
+
+#overlayGrid .label {
+    -fx-font-family: "Space Mono";
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+
+#overlayGrid .text-field {
+    -fx-font-family: "Space Mono";
+    -fx-font-size: 12px;
+}
+
+
+
+
+```
 ###### \resources\view\StatusBarFooter.fxml
 ``` fxml
+
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -4180,8 +5194,8 @@ public class TaskListPanel extends UiPart<Region> {
       <ColumnConstraints />
     </columnConstraints>
     <StatusBar fx:id="syncStatus" styleClass="anchor-pane" />
-    <StatusBar fx:id="saveLocationStatus" nodeOrientation="RIGHT_TO_LEFT" styleClass="anchor-pane" GridPane.columnIndex="1" />
-    <StatusBar fx:id="numberStatus" nodeOrientation="RIGHT_TO_LEFT" styleClass="anchor-pane" GridPane.columnIndex="2" />
+    <StatusBar fx:id="saveLocationStatus" nodeOrientation="LEFT_TO_RIGHT" styleClass="anchor-pane" GridPane.columnIndex="1" />
+    <StatusBar fx:id="numberStatus" nodeOrientation="LEFT_TO_RIGHT" styleClass="anchor-pane" GridPane.columnIndex="2" />
     <StatusBar fx:id="timeStatus" nodeOrientation="RIGHT_TO_LEFT" styleClass="anchor-pane" text="" GridPane.columnIndex="3" />
    <rowConstraints>
       <RowConstraints />
@@ -4190,6 +5204,7 @@ public class TaskListPanel extends UiPart<Region> {
 ```
 ###### \resources\view\TaskListCard.fxml
 ``` fxml
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -4212,7 +5227,7 @@ public class TaskListPanel extends UiPart<Region> {
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label fx:id="id" minWidth="40.0" styleClass="cell_big_label" stylesheets="@../../../../../sampletesta/src/main/resources/view/TasksPanel.css" text="\$ID" wrapText="true" />
+            <Label fx:id="id" alignment="TOP_RIGHT" contentDisplay="CENTER" minWidth="40.0" styleClass="cell_big_label" stylesheets="@../../../../../sampletesta/src/main/resources/view/TasksPanel.css" text="\$ID" wrapText="true" />
             <VBox fx:id="taskVbox" alignment="CENTER" styleClass="vbox" GridPane.columnIndex="1">
                <children>
                   <Label fx:id="header" styleClass="cell_big_label" stylesheets="@../../../../../sampletesta/src/main/resources/view/TasksPanel.css" text="\$task" wrapText="true">
