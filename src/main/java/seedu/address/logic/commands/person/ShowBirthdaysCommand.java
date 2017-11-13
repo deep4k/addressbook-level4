@@ -1,8 +1,5 @@
 package seedu.address.logic.commands.person;
 
-import seedu.address.commons.core.EventsCenter;
-import seedu.address.commons.events.model.ListSizeEvent;
-import seedu.address.commons.events.ui.ToggleListAllStyleEvent;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.person.CheckBirthdays;
