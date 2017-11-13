@@ -22,14 +22,8 @@ in this portfolio are the enhancements, features, tests and proposed enhancement
 
 include::../UserGuide.adoc[tag=alias]
 
+
 #End of Extract#
-
----
-
-==== Justification
-
-Users will want to have their own preference of commands to use, they will also want to
-add shortcuts to words that they regularly.
 
 ==== Implementation
 
@@ -41,16 +35,62 @@ include::../DeveloperGuide.adoc[tag=alias]
 #End of Extract#
 
 ---
-=== Enhancement Added: Remark
+
+==== Justification
+
+Users will want to have their own preference of commands to use, they will also want to
+add shortcuts to words that they regularly.
+
+=== Segment Added: Get to know Bluebird design!
 
 ==== External behavior
 
 ---
 #Start of Extract [from: User Guide]#
 
-include::../UserGuide.adoc[tag=undoredo]
+include::../UserGuide.adoc[tag=design]
+
 
 #End of Extract#
+
+---
+
+==== Justification
+The purpose of creating these birds is to boost the liveliness of our application and provide both children and adults
+alike with fun and animated interactive styles with Bluebird.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=banner]
+include::../DeveloperGuide.adoc[tag=design]
+
+
+#End of Extract#'
+
+---
+
+=== Enhancement Added: Add tasks
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=task]
+
+
+#End of Extract#
+
+---
+
+==== Justification
+Users can manage tasks as well as contacts on Bluebird, giving children more autonomy to organize their events
+and allows parents to supervise children while fostering independent learning
+
+
 
 ---
 
@@ -60,20 +100,24 @@ Users will want to have a remark for their contacts to better identify them.
 
 ==== Implementation
 
+
+=== Segment Added: Design segment of Bluebird explained
+
 ---
 #Start of Extract [from: Developer Guide]#
 
-include::../DeveloperGuide.adoc[tag=undoredo]
+include::../DeveloperGuide.adoc[tag=design]
 
 #End of Extract#
 
 ---
-=== Enhancement Proposed: Add command `task'
 
-{Explain similar to the Undo/Redo feature above.}
 
 === Other contributions
 
+* Responsible for overall UI of Bluebird (Pull requests https://github.com/CS2103AUG2017-T15-B4/main/pull/277[#277])
+* Added Task model using Natty dependency for Bluebird (Pull requests https://github.com/CS2103AUG2017-T15-B4/main/pull/222[#222])
+* Updated UI to display task count in status bar footer (Pull requests https://github.com/CS2103AUG2017-T15-B4/main/pull/240[#240])
 * Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
 * Wrote additional tests to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
 
