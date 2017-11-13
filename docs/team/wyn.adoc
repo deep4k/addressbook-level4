@@ -3,19 +3,23 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== Project: AddressBook - Level 4
-AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 6 kLoC.
+== Project: Bluebird
+Bluebird is a desktop based organisational tool for the working parent on the go. Bluebird is suitable for a variety of
+day-to-day management tasks, including managing appointments for both yourself and your child, and also organising the
+contact information from your Address Book. The user interacts with it using a CLI, and it has a GUI created with
+JavaFX. It is written in Java, and has about 6 kLoC.
 
 *Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] {give links to collated code files}
 
-=== Enhancement Added: Undo/Redo
+=== Enhancement Added: Hide/Unhide
 
 ==== External behavior
 
 ---
 #Start of Extract [from: User Guide]#
 
-include::../UserGuide.adoc[tag=undoredo]
+include::../UserGuide.adoc[tag=hide]
+include::../UserGuide.adoc[tag=unhide]
 
 #End of Extract#
 
@@ -23,22 +27,27 @@ include::../UserGuide.adoc[tag=undoredo]
 
 ==== Justification
 
-{Justify the need for, and the current design (i.e. external behavior) of, the feature}
+Since this application is directed largely at working parents who occasionally allow their children to explore the
+the application, there might be contacts in Bluebird's address book that the parent might not want the child to see.
 
 ==== Implementation
 
 ---
 #Start of Extract [from: Developer Guide]#
 
-include::../DeveloperGuide.adoc[tag=undoredo]
+include::../DeveloperGuide.adoc[tag=hide]
+include::../DeveloperGuide.adoc[tag=unhide]
 
 #End of Extract#
 
 ---
 
-=== Enhancement Proposed: Add command `remark`
+=== Enhancement Proposed: Hide/Unhide tasks
 
-{Explain similar to the Undo/Redo feature above.}
+Similar to having hide/unhide for person contacts, having hide/unhide for tasks would allow parent users to conceal
+tasks that they wouldn't want their child to see. For example, doctor appointments or other sensitive tasks.
+
+=== Enhancement Proposal:
 
 === Other contributions
 
