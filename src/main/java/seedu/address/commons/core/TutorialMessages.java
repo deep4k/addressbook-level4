@@ -54,6 +54,7 @@ public class TutorialMessages {
             + "4. findpin\n"
             + "5. list\n"
             + "6. listpin\n"
+            + "7. showbirthdays\n"
             + "7. remark\n"
             + "8. sort\n"
             + "9. history\n"
