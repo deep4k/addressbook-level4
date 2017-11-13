@@ -8,14 +8,14 @@ public class BirthdayTest {
         // invalid formats for birthdays
         assertFalse(Birthday.isValidBirthday("")); // empty string
         assertFalse(Birthday.isValidBirthday(" ")); // spaces only
-        assertFalse(Birthday.isValidBirthday("12011997")); // no forward slashes between digits
-        assertFalse(Birthday.isValidBirthday("twelve/dec/nineteen-ninety")); // non-numeric
-        assertFalse(Birthday.isValidBirthday("90/dec/1997")); // alphabets within digits
-        assertFalse(Birthday.isValidBirthday("93/ 15/ 34")); // spaces between digits
+        assertFalse(Birthday.isValidBirthday("01011901")); // no forward slashes between digits
+        assertFalse(Birthday.isValidBirthday("first/dec/nineteen-ninety-three")); // non-numeric
+        assertFalse(Birthday.isValidBirthday("01/jan/1901")); // alphabets within digits
+        assertFalse(Birthday.isValidBirthday("22/ 11/ 10")); // spaces between digits
 
         // valid formats for birthdays
-        assertTrue(Birthday.isValidBirthday("20/11/1997")); // DD/MM/YYYY
-        assertTrue(Birthday.isValidBirthday("20/11/97"));   // DD/MM/YY
+        assertTrue(Birthday.isValidBirthday("11/11/1993")); // DD/MM/YYYY
+        assertTrue(Birthday.isValidBirthday("11/11/93"));   // DD/MM/YY
     }
 }
 ```
